@@ -105,6 +105,7 @@ dev = [
   "django-extensions==4.1",
   "djlint==1.36.4",
   "factory-boy==3.3.2",
+  "ipdb==0.13.13",
   "psycopg[binary]==3.3.1",
   "pytest==9.0.2",
   "pytest-django==4.11.1",
