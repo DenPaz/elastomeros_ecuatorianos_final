@@ -40,15 +40,14 @@ class Command(BaseCommand):
                 defaults=defaults,
                 **lookup,
             )
-            if created:
-                obj.set_password(password)
-                obj.save()
-                EmailAddress.objects.update_or_create(
-                    user=obj,
-                    email=obj.email,
-                    verified=True,
-                    primary=True,
-                )
+            obj.set_password(password)
+            obj.save()
+            EmailAddress.objects.update_or_create(
+                user=obj,
+                email=obj.email,
+                verified=True,
+                primary=True,
+            )
             action = "Created" if created else "Updated"
             style = self.style.SUCCESS if created else self.style.WARNING
             self.stdout.write(style(f"{action} user: {obj}"))
