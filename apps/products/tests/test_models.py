@@ -235,7 +235,7 @@ class TestProductVariantAttributeValue:
         assert set(variant2.attribute_values.all()) == {value1}
         pvav_duplicate = ProductVariantAttributeValueFactory.build(
             product_variant=variant2,
-            attribute_value=value1,
+            attribute_value=value2,
         )
         with pytest.raises(ValidationError):
             pvav_duplicate.save()
