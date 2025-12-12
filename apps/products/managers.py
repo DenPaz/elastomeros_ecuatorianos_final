@@ -1,8 +1,6 @@
 from django.apps import apps
 from django.db import models
 from django.db.models import Count
-from django.db.models import Max
-from django.db.models import Min
 from django.db.models import Prefetch
 from django.db.models import Q
 
@@ -17,6 +15,14 @@ class CategoryQuerySet(ActiveQuerySet):
         Product = apps.get_model("products", "Product")
         queryset = Product.objects.active().order_by("name")
         return self.prefetch_related(Prefetch("products", queryset=queryset))
+
+    def with_product_counts(self):
+        return self.annotate(
+            product_count=Count(
+                "products",
+                filter=Q(products__is_active=True),
+            ),
+        )
 
 
 class CategoryManager(models.Manager.from_queryset(CategoryQuerySet)):
@@ -55,8 +61,7 @@ class ProductQuerySet(ActiveQuerySet):
 
 
 class ProductManager(models.Manager.from_queryset(ProductQuerySet)):
-    def get_queryset(self):
-        return super().get_queryset().with_category()
+    pass
 
 
 class ProductAttributeQuerySet(models.QuerySet):
