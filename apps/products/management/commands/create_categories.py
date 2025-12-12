@@ -23,14 +23,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         for entry in data:
-            lookup = {
-                "name": entry["name"],
-            }
+            lookup = {"slug": entry["slug"]}
             defaults = {k: v for k, v in entry.items() if k not in lookup}
+
             obj, created = Category.objects.update_or_create(
                 defaults=defaults,
                 **lookup,
             )
+
             action = "Created" if created else "Updated"
             style = self.style.SUCCESS if created else self.style.WARNING
             self.stdout.write(style(f"{action} category: {obj}"))

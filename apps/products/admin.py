@@ -1,15 +1,9 @@
-import nested_admin
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from .models import Attribute
 from .models import AttributeValue
 from .models import Category
-from .models import Product
-from .models import ProductAttribute
-from .models import ProductImage
-from .models import ProductVariant
-from .models import ProductVariantAttributeValue
 
 
 @admin.register(Category)
@@ -22,7 +16,6 @@ class CategoryAdmin(admin.ModelAdmin):
                     "name",
                     "slug",
                     "description",
-                    "image",
                     "is_active",
                 ),
             },
@@ -34,15 +27,6 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ["id", "created", "modified"]
     list_per_page = 10
-
-
-@admin.register(AttributeValue)
-class AttributeValueAdmin(admin.ModelAdmin):
-    search_fields = ["attribute__name", "value"]
-    autocomplete_fields = ["attribute"]
-
-    def has_module_permission(self, request):
-        return False
 
 
 class AttributeValueInline(admin.TabularInline):
@@ -60,14 +44,17 @@ class AttributeAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "name",
+                    "attribute_type",
                     "description",
-                    "is_active",
                 ),
             },
         ),
     )
-    list_display = ["name", "is_active"]
-    list_filter = ["is_active"]
+    list_display = [
+        "name",
+        "attribute_type",
+    ]
+    list_filter = ["attribute_type"]
     search_fields = ["name"]
     readonly_fields = ["id", "created", "modified"]
     list_per_page = 10

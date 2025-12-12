@@ -1,21 +1,27 @@
-from decimal import Decimal
-
+from django.utils.text import slugify
 from factory import Faker
+from factory import Iterator
+from factory import LazyAttribute
 from factory import Sequence
 from factory import SubFactory
+from factory import post_generation
 from factory.django import DjangoModelFactory
+from factory.django import ImageField
 
+from apps.products.choices import AttributeType
 from apps.products.models import Attribute
 from apps.products.models import AttributeValue
 from apps.products.models import Category
 from apps.products.models import Product
 from apps.products.models import ProductAttribute
+from apps.products.models import ProductImage
 from apps.products.models import ProductVariant
+from apps.products.models import ProductVariantAttributeValue
 
 
 class CategoryFactory(DjangoModelFactory):
-    name = Sequence(lambda n: f"category-{n}")
-    slug = Sequence(lambda n: f"category-{n}")
+    name = Sequence(lambda n: f"Category {n}")
+    slug = LazyAttribute(lambda obj: slugify(obj.name))
     description = Faker("paragraph")
     is_active = True
 
@@ -24,19 +30,27 @@ class CategoryFactory(DjangoModelFactory):
 
 
 class AttributeFactory(DjangoModelFactory):
-    name = Sequence(lambda n: f"attribute-{n}")
+    name = Sequence(lambda n: f"Attribute {n}")
+    attribute_type = Iterator([choice[0] for choice in AttributeType.choices])
     description = Faker("paragraph")
-    is_active = True
 
     class Meta:
         model = Attribute
+        skip_postgeneration_save = True
+
+    @post_generation
+    def values(self, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+
+        for value in extracted:
+            AttributeValueFactory(attribute=self, value=value)
 
 
 class AttributeValueFactory(DjangoModelFactory):
     attribute = SubFactory(AttributeFactory)
-    value = Faker("word")
-    sort_order = 0
-    is_active = True
+    value = Sequence(lambda n: f"Value {n}")
+    sort_order = None
 
     class Meta:
         model = AttributeValue
@@ -44,15 +58,25 @@ class AttributeValueFactory(DjangoModelFactory):
 
 class ProductFactory(DjangoModelFactory):
     category = SubFactory(CategoryFactory)
-    name = Faker("word")
-    slug = Sequence(lambda n: f"product-{n}")
+    name = Sequence(lambda n: f"Product {n}")
+    slug = LazyAttribute(lambda obj: slugify(obj.name))
     short_description = Faker("sentence")
     full_description = Faker("paragraph")
-    base_price = Decimal("9.99")
+    base_price = Faker("pydecimal", left_digits=4, right_digits=2, positive=True)
+    is_featured = False
     is_active = True
 
     class Meta:
         model = Product
+        skip_postgeneration_save = True
+
+    @post_generation
+    def attributes(self, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+
+        for attribute in extracted:
+            ProductAttributeFactory(product=self, attribute=attribute)
 
 
 class ProductAttributeFactory(DjangoModelFactory):
@@ -65,11 +89,52 @@ class ProductAttributeFactory(DjangoModelFactory):
 
 class ProductVariantFactory(DjangoModelFactory):
     product = SubFactory(ProductFactory)
-    sku = Sequence(lambda n: f"SKU-{n}")
+    sku = Sequence(lambda n: f"SKU-{n:05d}")
     price_override = None
-    stock_quantity = 0
-    sort_order = 0
+    stock_quantity = Faker("pyint", min_value=0, max_value=100)
     is_active = True
 
     class Meta:
         model = ProductVariant
+        skip_postgeneration_save = True
+
+    @post_generation
+    def attribute_values(self, create, extracted, **kwargs):
+        if not create or not extracted:
+            return
+
+        for attribute_value in extracted:
+            ProductVariantAttributeValueFactory(
+                product_variant=self,
+                attribute_value=attribute_value,
+            )
+
+
+class ProductVariantAttributeValueFactory(DjangoModelFactory):
+    product_variant = SubFactory(ProductVariantFactory)
+    attribute_value = SubFactory(AttributeValueFactory)
+
+    class Meta:
+        model = ProductVariantAttributeValue
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        product_variant = kwargs.get("product_variant")
+        attribute_value = kwargs.get("attribute_value")
+        if product_variant is not None and attribute_value is not None:
+            ProductAttribute.objects.get_or_create(
+                product=product_variant.product,
+                attribute=attribute_value.attribute,
+            )
+        return super()._create(model_class, *args, **kwargs)
+
+
+class ProductImageFactory(DjangoModelFactory):
+    product = SubFactory(ProductFactory)
+    variant = None
+    image = ImageField(filename="test.jpg")
+    alt_text = ""
+    is_active = True
+
+    class Meta:
+        model = ProductImage
