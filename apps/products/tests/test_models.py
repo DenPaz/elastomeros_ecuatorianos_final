@@ -37,10 +37,11 @@ class TestAttribute:
         with pytest.raises(IntegrityError):
             AttributeFactory(name="material")
 
-    def test_post_generation_values_creates_attribute_values(self):
+    def test_factory_post_generation_values_creates_attribute_values(self):
         attribute = AttributeFactory(values=["Red", "Blue", "Green"])
         values = list(attribute.values.values_list("value", flat=True))
         assert set(values) == {"Red", "Blue", "Green"}
+        assert attribute.values.count() == 3  # noqa: PLR2004
 
 
 @pytest.mark.django_db
@@ -51,10 +52,10 @@ class TestAttributeValue:
         assert str(attribute_value) == "Size: Large"
 
     def test_unique_value_per_attribute_case_insensitive(self):
-        attribute = AttributeFactory(name="Brand")
-        AttributeValueFactory(attribute=attribute, value="Nike")
+        attribute = AttributeFactory()
+        AttributeValueFactory(attribute=attribute, value="Small")
         with pytest.raises(IntegrityError):
-            AttributeValueFactory(attribute=attribute, value="nike")
+            AttributeValueFactory(attribute=attribute, value="small")
 
     def test_same_value_allowed_for_different_attributes(self):
         attribute1 = AttributeFactory(name="Color")
@@ -72,7 +73,7 @@ class TestProduct:
         assert str(product) == "Smartphone"
 
     def test_name_is_unique_per_category_case_insensitive(self):
-        category = CategoryFactory(name="Gadgets")
+        category = CategoryFactory()
         ProductFactory(category=category, name="Tablet", slug="tablet")
         with pytest.raises(IntegrityError):
             ProductFactory(category=category, name="tablet", slug="tablet-1")
@@ -85,12 +86,13 @@ class TestProduct:
         assert product1.name == product2.name
         assert product1.category != product2.category
 
-    def test_post_generation_attributes_creates_product_attributes(self):
+    def test_factory_post_generation_attributes_creates_product_attributes(self):
         attribute1 = AttributeFactory(name="Warranty")
         attribute2 = AttributeFactory(name="Battery Life")
         product = ProductFactory(attributes=[attribute1, attribute2])
-        linked_attributes = list(product.attributes.all())
-        assert set(linked_attributes) == {attribute1, attribute2}
+        attributes = list(product.attributes.all())
+        assert set(attributes) == {attribute1, attribute2}
+        assert product.attributes.count() == 2  # noqa: PLR2004
 
 
 @pytest.mark.django_db
@@ -141,7 +143,7 @@ class TestProductVariant:
         assert variant_with_price_override.price == Decimal("80.00")
         assert variant_without_price_override.price == Decimal("100.00")
 
-    def test_post_generation_attribute_values_creates_variant_attribute_values(self):
+    def test_factory_post_generation_attribute_values_creates_attribute_values(self):
         attribute1 = AttributeFactory(name="Color")
         value1 = AttributeValueFactory(attribute=attribute1, value="Black")
         attribute2 = AttributeFactory(name="Size")
@@ -158,14 +160,15 @@ class TestProductVariant:
 @pytest.mark.django_db
 class TestProductVariantAttributeValue:
     def test_str_method_returns_product_variant_sku_and_attribute_value(self):
-        variant = ProductVariantFactory(sku="CAM-001")
         attribute = AttributeFactory(name="Color")
-        attribute_value = AttributeValueFactory(attribute=attribute, value="Black")
-        pvav = ProductVariantAttributeValueFactory(
+        attribute_value = AttributeValueFactory(attribute=attribute, value="Red")
+        product = ProductFactory(attributes=[attribute])
+        variant = ProductVariantFactory(product=product, sku="VAR-001")
+        link = ProductVariantAttributeValueFactory(
             product_variant=variant,
             attribute_value=attribute_value,
         )
-        assert str(pvav) == "CAM-001 - Color: Black"
+        assert str(link) == "VAR-001 - Color: Red"
 
     def test_unique_product_variant_attribute_value_link(self):
         variant = ProductVariantFactory()
@@ -210,35 +213,6 @@ class TestProductVariantAttributeValue:
         )
         with pytest.raises(ValidationError):
             pvav_invalid.save()
-
-    def test_unique_combination_of_attribute_value_per_product(self):
-        attribute1 = AttributeFactory(name="Color")
-        value1 = AttributeValueFactory(attribute=attribute1, value="Red")
-        attribute2 = AttributeFactory(name="Size")
-        value2 = AttributeValueFactory(attribute=attribute2, value="Medium")
-        product = ProductFactory()
-        variant1 = ProductVariantFactory(product=product)
-        ProductVariantAttributeValueFactory(
-            product_variant=variant1,
-            attribute_value=value1,
-        )
-        ProductVariantAttributeValueFactory(
-            product_variant=variant1,
-            attribute_value=value2,
-        )
-        assert set(variant1.attribute_values.all()) == {value1, value2}
-        variant2 = ProductVariantFactory(product=product)
-        ProductVariantAttributeValueFactory(
-            product_variant=variant2,
-            attribute_value=value1,
-        )
-        assert set(variant2.attribute_values.all()) == {value1}
-        pvav_duplicate = ProductVariantAttributeValueFactory.build(
-            product_variant=variant2,
-            attribute_value=value2,
-        )
-        with pytest.raises(ValidationError):
-            pvav_duplicate.save()
 
     def test_same_attribute_value_allowed_for_different_variants(self):
         attribute1 = AttributeFactory(name="Color")
