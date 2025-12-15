@@ -25,6 +25,11 @@ class TestCategory:
         with pytest.raises(IntegrityError):
             CategoryFactory(name="books", slug="books-1")
 
+    def test_slug_is_unique(self):
+        CategoryFactory(slug="home-appliances")
+        with pytest.raises(IntegrityError):
+            CategoryFactory(slug="home-appliances")
+
 
 @pytest.mark.django_db
 class TestAttribute:
@@ -51,11 +56,11 @@ class TestAttributeValue:
         attribute_value = AttributeValueFactory(attribute=attribute, value="Large")
         assert str(attribute_value) == "Size: Large"
 
-    def test_unique_value_per_attribute_case_insensitive(self):
-        attribute = AttributeFactory()
-        AttributeValueFactory(attribute=attribute, value="Small")
+    def test_value_is_unique_per_attribute_case_insensitive(self):
+        attribute = AttributeFactory(name="Color")
+        AttributeValueFactory(attribute=attribute, value="Red")
         with pytest.raises(IntegrityError):
-            AttributeValueFactory(attribute=attribute, value="small")
+            AttributeValueFactory(attribute=attribute, value="red")
 
     def test_same_value_allowed_for_different_attributes(self):
         attribute1 = AttributeFactory(name="Color")
@@ -85,6 +90,11 @@ class TestProduct:
         product2 = ProductFactory(category=category2, name="Desk", slug="desk-1")
         assert product1.name == product2.name
         assert product1.category != product2.category
+
+    def test_slug_is_unique(self):
+        ProductFactory(slug="gaming-laptop")
+        with pytest.raises(IntegrityError):
+            ProductFactory(slug="gaming-laptop")
 
     def test_factory_post_generation_attributes_creates_product_attributes(self):
         attribute1 = AttributeFactory(name="Warranty")
@@ -130,6 +140,11 @@ class TestProductVariant:
         variant = ProductVariantFactory(product=product, sku="CAM-001")
         assert str(variant) == "Camera (SKU: CAM-001)"
 
+    def test_unique_sku(self):
+        ProductVariantFactory(sku="UNIQUE-SKU")
+        with pytest.raises(IntegrityError):
+            ProductVariantFactory(sku="UNIQUE-SKU")
+
     def test_price_property_returns_correct_value(self):
         product = ProductFactory(base_price=Decimal("100.00"))
         variant_with_price_override = ProductVariantFactory(
@@ -155,6 +170,7 @@ class TestProductVariant:
         )
         linked_values = list(variant.attribute_values.all())
         assert set(linked_values) == {value1, value2}
+        assert variant.attribute_values.count() == 2  # noqa: PLR2004
 
 
 @pytest.mark.django_db
@@ -170,78 +186,79 @@ class TestProductVariantAttributeValue:
         )
         assert str(link) == "VAR-001 - Color: Red"
 
-    def test_unique_product_variant_attribute_value_link(self):
-        variant = ProductVariantFactory()
+    def test_save_method_sets_attribute_from_attribute_value(self):
         attribute = AttributeFactory(name="Color")
-        attribute_value = AttributeValueFactory(attribute=attribute, value="Red")
-        ProductVariantAttributeValueFactory(
+        value = AttributeValueFactory(attribute=attribute, value="Blue")
+        product = ProductFactory(attributes=[attribute])
+        variant = ProductVariantFactory(product=product)
+        link = ProductVariantAttributeValueFactory(
             product_variant=variant,
-            attribute_value=attribute_value,
+            attribute_value=value,
         )
-        pvav_duplicate = ProductVariantAttributeValueFactory.build(
-            product_variant=variant,
-            attribute_value=attribute_value,
-        )
-        with pytest.raises(ValidationError):
-            pvav_duplicate.save()
+        link.refresh_from_db()
+        assert link.attribute_id == attribute.id
 
-    def test_one_value_per_attribute_per_variant(self):
-        product = ProductFactory()
+    def test_unique_value_per_attribute_per_variant(self):
         attribute = AttributeFactory(name="Size")
-        value1 = AttributeValueFactory(attribute=attribute, value="Small")
+        value1 = AttributeValueFactory(attribute=attribute, value="Medium")
         value2 = AttributeValueFactory(attribute=attribute, value="Large")
+        product = ProductFactory(attributes=[attribute])
         variant = ProductVariantFactory(product=product)
         ProductVariantAttributeValueFactory(
             product_variant=variant,
             attribute_value=value1,
         )
-        pvav_conflict = ProductVariantAttributeValueFactory.build(
+        link_invalid = ProductVariantAttributeValueFactory.build(
             product_variant=variant,
             attribute_value=value2,
         )
         with pytest.raises(ValidationError):
-            pvav_conflict.save()
+            link_invalid.save()
 
-    def test_attribute_must_be_linked_to_product(self):
+    def test_attribute_must_belong_to_product(self):
+        attribute = AttributeFactory(name="Material")
+        value = AttributeValueFactory(attribute=attribute, value="Cotton")
         product = ProductFactory()
         variant = ProductVariantFactory(product=product)
-        attribute = AttributeFactory(name="Material")
-        attribute_value = AttributeValueFactory(attribute=attribute, value="Cotton")
-        pvav_invalid = ProductVariantAttributeValueFactory.build(
+        link = ProductVariantAttributeValueFactory.build(
             product_variant=variant,
-            attribute_value=attribute_value,
+            attribute_value=value,
         )
         with pytest.raises(ValidationError):
-            pvav_invalid.save()
+            link.save()
 
-    def test_same_attribute_value_allowed_for_different_variants(self):
-        attribute1 = AttributeFactory(name="Color")
-        value1 = AttributeValueFactory(attribute=attribute1, value="Blue")
-        attribute2 = AttributeFactory(name="Size")
-        value2 = AttributeValueFactory(attribute=attribute2, value="Large")
-        product1 = ProductFactory()
-        product2 = ProductFactory()
-        variant1 = ProductVariantFactory(product=product1)
-        variant2 = ProductVariantFactory(product=product2)
+    def test_duplicate_variant_attribute_value_pair_raises_validation_error(self):
+        attribute = AttributeFactory(name="Size")
+        value = AttributeValueFactory(attribute=attribute, value="Small")
+        product = ProductFactory(attributes=[attribute])
+        variant = ProductVariantFactory(product=product)
         ProductVariantAttributeValueFactory(
-            product_variant=variant1,
+            product_variant=variant,
+            attribute_value=value,
+        )
+        duplicate_link = ProductVariantAttributeValueFactory.build(
+            product_variant=variant,
+            attribute_value=value,
+        )
+        with pytest.raises(ValidationError):
+            duplicate_link.save()
+
+    def test_unique_variant_attribute_constraint_raises_validation_error(self):
+        attribute = AttributeFactory(name="Color")
+        value1 = AttributeValueFactory(attribute=attribute, value="Red")
+        value2 = AttributeValueFactory(attribute=attribute, value="Blue")
+        product = ProductFactory(attributes=[attribute])
+        variant = ProductVariantFactory(product=product)
+        ProductVariantAttributeValueFactory(
+            product_variant=variant,
             attribute_value=value1,
         )
-        ProductVariantAttributeValueFactory(
-            product_variant=variant1,
+        duplicate_link = ProductVariantAttributeValueFactory.build(
+            product_variant=variant,
             attribute_value=value2,
         )
-        ProductVariantAttributeValueFactory(
-            product_variant=variant2,
-            attribute_value=value1,
-        )
-        ProductVariantAttributeValueFactory(
-            product_variant=variant2,
-            attribute_value=value2,
-        )
-        assert set(variant1.attribute_values.all()) == {value1, value2}
-        assert set(variant2.attribute_values.all()) == {value1, value2}
-        assert variant1.product != variant2.product
+        with pytest.raises(ValidationError):
+            duplicate_link.save()
 
 
 @pytest.mark.django_db
