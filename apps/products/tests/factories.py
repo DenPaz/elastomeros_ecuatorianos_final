@@ -92,6 +92,7 @@ class ProductVariantFactory(DjangoModelFactory):
     sku = Sequence(lambda n: f"SKU-{n:05d}")
     price_override = None
     stock_quantity = Faker("pyint", min_value=0, max_value=100)
+    sort_order = None
     is_active = True
 
     class Meta:
@@ -134,6 +135,7 @@ class ProductImageFactory(DjangoModelFactory):
     variant = None
     image = ImageField(filename="test.jpg")
     alt_text = ""
+    sort_order = None
     is_active = True
 
     class Meta:
