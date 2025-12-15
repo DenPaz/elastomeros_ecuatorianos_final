@@ -65,29 +65,41 @@ class ProductManager(models.Manager.from_queryset(ProductQuerySet)):
 
 
 class ProductAttributeQuerySet(models.QuerySet):
-    pass
+    def with_product(self):
+        return self.select_related("product")
+
+    def with_attribute(self):
+        return self.select_related("attribute")
 
 
 class ProductAttributeManager(models.Manager.from_queryset(ProductAttributeQuerySet)):
-    pass
+    def get_queryset(self):
+        return super().get_queryset().with_product().with_attribute()
 
 
 class ProductVariantQuerySet(ActiveQuerySet):
-    pass
+    def with_product(self):
+        return self.select_related("product")
 
 
 class ProductVariantManager(models.Manager.from_queryset(ProductVariantQuerySet)):
-    pass
+    def get_queryset(self):
+        return super().get_queryset().with_product()
 
 
 class ProductVariantAttributeValueQuerySet(models.QuerySet):
-    pass
+    def with_product_variant(self):
+        return self.select_related("product_variant")
+
+    def with_attribute(self):
+        return self.select_related("attribute_value__attribute")
 
 
 class ProductVariantAttributeValueManager(
     models.Manager.from_queryset(ProductVariantAttributeValueQuerySet),
 ):
-    pass
+    def get_queryset(self):
+        return super().get_queryset().with_product_variant().with_attribute()
 
 
 class ProductImageQuerySet(ActiveQuerySet):

@@ -4,6 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from .models import Attribute
 from .models import AttributeValue
 from .models import Category
+from .models import Product
+from .models import ProductAttribute
+from .models import ProductVariant
+from .models import ProductVariantAttributeValue
 
 
 @admin.register(Category)
@@ -58,3 +62,9 @@ class AttributeAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     readonly_fields = ["id", "created", "modified"]
     list_per_page = 10
+
+
+admin.site.register(Product)
+admin.site.register(ProductAttribute)
+admin.site.register(ProductVariant)
+admin.site.register(ProductVariantAttributeValue)

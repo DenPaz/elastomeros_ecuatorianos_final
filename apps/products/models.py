@@ -223,8 +223,8 @@ class ProductAttribute(models.Model):
     objects = ProductAttributeManager()
 
     class Meta:
-        verbose_name = _("Product-attribute link")
-        verbose_name_plural = _("Product-attribute links")
+        verbose_name = _("Product-Attribute link")
+        verbose_name_plural = _("Product-Attribute links")
         constraints = [
             models.UniqueConstraint(
                 fields=["product", "attribute"],
@@ -314,41 +314,52 @@ class ProductVariantAttributeValue(models.Model):
         related_name="variant_attribute_values",
         on_delete=models.PROTECT,
     )
+    attribute = models.ForeignKey(
+        to=Attribute,
+        verbose_name=_("Attribute"),
+        on_delete=models.PROTECT,
+        editable=False,
+    )
 
     objects = ProductVariantAttributeValueManager()
 
     class Meta:
-        verbose_name = _("Product-variant-attribute-value link")
-        verbose_name_plural = _("Product-variant-attribute-value links")
+        verbose_name = _("ProductVariant-AttributeValue link")
+        verbose_name_plural = _("ProductVariant-AttributeValue links")
         constraints = [
-            # No duplicate attribute values for the same product variant
             models.UniqueConstraint(
                 fields=["product_variant", "attribute_value"],
                 name="unique_product_variant_attribute_value_link",
             ),
+            models.UniqueConstraint(
+                fields=["product_variant", "attribute"],
+                name="unique_product_variant_attribute_link",
+            ),
         ]
-        ordering = ["product_variant", "attribute_value"]
+        ordering = ["product_variant", "attribute"]
 
     def __str__(self):
         return f"{self.product_variant.sku} - {self.attribute_value}"
 
     def save(self, *args, **kwargs):
+        if self.attribute_value_id:
+            self.attribute = self.attribute_value.attribute
         self.full_clean()
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        if not self.product_variant or not self.attribute_value:
+        if not self.product_variant_id or not self.attribute_value_id:
             return
-
-        product_variant = self.product_variant
-        product = product_variant.product
+        product = self.product_variant.product
         attribute = self.attribute_value.attribute
+        self._validate_unique_attribute_per_variant(attribute)
+        self._validate_attribute_belongs_to_product(product, attribute)
 
-        # One value per attribute per product variant
+    def _validate_unique_attribute_per_variant(self, attribute):
         qs = self.__class__.objects.filter(
             product_variant=self.product_variant,
-            attribute_value__attribute=attribute,
+            attribute=attribute,
         )
         if self.pk:
             qs = qs.exclude(pk=self.pk)
@@ -356,71 +367,29 @@ class ProductVariantAttributeValue(models.Model):
             raise ValidationError(
                 {
                     "attribute_value": _(
-                        (
-                            "This product variant already has a value for the "
-                            "attribute '%(attribute)s'."
-                        ),
+                        "The attribute '%(attribute)s' is already assigned "
+                        "to this product variant.",
                     )
-                    % {"attribute": attribute.name},
+                    % {
+                        "attribute": attribute.name,
+                    },
                 },
             )
 
-        # The attribute must be linked to the product
+    def _validate_attribute_belongs_to_product(self, product, attribute):
         if not product.attributes.filter(pk=attribute.pk).exists():
             raise ValidationError(
                 {
                     "attribute_value": _(
-                        (
-                            "The attribute '%(attribute)s' is not associated "
-                            "with the product '%(product)s'."
-                        ),
+                        "The attribute '%(attribute)s' is not associated "
+                        "with the product '%(product)s'.",
                     )
-                    % {"attribute": attribute.name, "product": product.name},
+                    % {
+                        "attribute": attribute.name,
+                        "product": product.name,
+                    },
                 },
             )
-
-        # Unique variant combination per product
-        self._validate_unique_variant_combination()
-
-    def _validate_unique_variant_combination(self):
-        product_variant = self.product_variant
-        product = product_variant.product
-
-        current_attribute_value_ids = set(
-            self.__class__.objects.filter(product_variant=product_variant)
-            .exclude(pk=self.pk)
-            .values_list("attribute_value_id", flat=True),
-        )
-        current_attribute_value_ids.add(self.attribute_value_id)
-
-        if not current_attribute_value_ids:
-            return
-
-        variant_qs = (
-            ProductVariant.objects.filter(product=product)
-            .exclude(pk=product_variant.pk)
-            .annotate(num_values=models.Count("attribute_values", distinct=True))
-            .filter(num_values=len(current_attribute_value_ids))
-        )
-
-        for other in variant_qs:
-            other_value_ids = set(
-                self.__class__.objects.filter(product_variant=other).values_list(
-                    "attribute_value_id",
-                    flat=True,
-                ),
-            )
-            if current_attribute_value_ids == other_value_ids:
-                raise ValidationError(
-                    {
-                        "attribute_value": _(
-                            "This combination of attribute values already "
-                            "exists for another variant of the product "
-                            "'%(product)s'.",
-                        )
-                        % {"product": product.name},
-                    },
-                )
 
 
 class ProductImage(TimeStampedModel):
