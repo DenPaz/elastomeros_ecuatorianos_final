@@ -7,7 +7,6 @@ from django.db.utils import IntegrityError
 from .factories import AttributeFactory
 from .factories import AttributeValueFactory
 from .factories import CategoryFactory
-from .factories import ProductAttributeFactory
 from .factories import ProductFactory
 from .factories import ProductImageFactory
 from .factories import ProductVariantAttributeValueFactory
@@ -103,34 +102,6 @@ class TestProduct:
         attributes = list(product.attributes.all())
         assert set(attributes) == {attribute1, attribute2}
         assert product.attributes.count() == 2  # noqa: PLR2004
-
-
-@pytest.mark.django_db
-class TestProductAttribute:
-    def test_str_method_returns_product_and_attribute_names(self):
-        product = ProductFactory(name="Laptop")
-        attribute = AttributeFactory(name="RAM")
-        link = ProductAttributeFactory(product=product, attribute=attribute)
-        assert str(link) == "Laptop - RAM"
-
-    def test_unique_product_attribute_link(self):
-        product = ProductFactory()
-        attribute = AttributeFactory()
-        ProductAttributeFactory(product=product, attribute=attribute)
-        with pytest.raises(IntegrityError):
-            ProductAttributeFactory(product=product, attribute=attribute)
-
-    def test_same_attribute_allowed_for_different_products(self):
-        attribute = AttributeFactory(name="Storage")
-        product1 = ProductFactory(name="Phone")
-        product2 = ProductFactory(name="Tablet")
-        link1 = ProductAttributeFactory(product=product1, attribute=attribute)
-        link2 = ProductAttributeFactory(product=product2, attribute=attribute)
-        assert link1.pk != link2.pk
-        assert attribute in product1.attributes.all()
-        assert attribute in product2.attributes.all()
-        assert product1 in attribute.products.all()
-        assert product2 in attribute.products.all()
 
 
 @pytest.mark.django_db

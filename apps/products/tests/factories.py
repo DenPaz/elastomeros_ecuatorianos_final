@@ -13,7 +13,6 @@ from apps.products.models import Attribute
 from apps.products.models import AttributeValue
 from apps.products.models import Category
 from apps.products.models import Product
-from apps.products.models import ProductAttribute
 from apps.products.models import ProductImage
 from apps.products.models import ProductVariant
 from apps.products.models import ProductVariantAttributeValue
@@ -74,17 +73,7 @@ class ProductFactory(DjangoModelFactory):
     def attributes(self, create, extracted, **kwargs):
         if not create or not extracted:
             return
-
-        for attribute in extracted:
-            ProductAttributeFactory(product=self, attribute=attribute)
-
-
-class ProductAttributeFactory(DjangoModelFactory):
-    product = SubFactory(ProductFactory)
-    attribute = SubFactory(AttributeFactory)
-
-    class Meta:
-        model = ProductAttribute
+        self.attributes.add(*extracted)
 
 
 class ProductVariantFactory(DjangoModelFactory):
@@ -123,10 +112,9 @@ class ProductVariantAttributeValueFactory(DjangoModelFactory):
         product_variant = kwargs.get("product_variant")
         attribute_value = kwargs.get("attribute_value")
         if product_variant is not None and attribute_value is not None:
-            ProductAttribute.objects.get_or_create(
-                product=product_variant.product,
-                attribute=attribute_value.attribute,
-            )
+            product = product_variant.product
+            if product and product.pk:
+                product.attributes.add(attribute_value.attribute)
         return super()._create(model_class, *args, **kwargs)
 
 
