@@ -16,7 +16,6 @@ from .choices import AttributeType
 from .managers import AttributeManager
 from .managers import AttributeValueManager
 from .managers import CategoryManager
-from .managers import ProductAttributeManager
 from .managers import ProductImageManager
 from .managers import ProductManager
 from .managers import ProductVariantAttributeValueManager
@@ -168,7 +167,6 @@ class Product(UUIDModel, TimeStampedModel):
     )
     attributes = models.ManyToManyField(
         to=Attribute,
-        through="ProductAttribute",
         verbose_name=_("Attributes"),
         related_name="products",
         blank=True,
@@ -204,37 +202,6 @@ class Product(UUIDModel, TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
-
-
-class ProductAttribute(models.Model):
-    product = models.ForeignKey(
-        to=Product,
-        verbose_name=_("Product"),
-        related_name="product_attributes",
-        on_delete=models.CASCADE,
-    )
-    attribute = models.ForeignKey(
-        to=Attribute,
-        verbose_name=_("Attribute"),
-        related_name="product_attributes",
-        on_delete=models.PROTECT,
-    )
-
-    objects = ProductAttributeManager()
-
-    class Meta:
-        verbose_name = _("Product-Attribute link")
-        verbose_name_plural = _("Product-Attribute links")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["product", "attribute"],
-                name="unique_product_attribute_link",
-            ),
-        ]
-        ordering = ["product", "attribute"]
-
-    def __str__(self):
-        return f"{self.product.name} - {self.attribute.name}"
 
 
 class ProductVariant(UUIDModel, TimeStampedModel):
@@ -377,6 +344,8 @@ class ProductVariantAttributeValue(models.Model):
             )
 
     def _validate_attribute_belongs_to_product(self, product, attribute):
+        if not product.pk:
+            return
         if not product.attributes.filter(pk=attribute.pk).exists():
             raise ValidationError(
                 {

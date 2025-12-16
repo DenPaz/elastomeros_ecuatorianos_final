@@ -1,3 +1,4 @@
+import nested_admin
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
@@ -5,7 +6,6 @@ from .models import Attribute
 from .models import AttributeValue
 from .models import Category
 from .models import Product
-from .models import ProductAttribute
 from .models import ProductVariant
 from .models import ProductVariantAttributeValue
 
@@ -25,18 +25,63 @@ class CategoryAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_display = ["name", "is_active"]
+    list_display = ["name", "product_count", "is_active"]
     list_filter = ["is_active"]
-    search_fields = ["name"]
+    search_fields = ["name", "slug"]
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ["id", "created", "modified"]
+    show_full_result_count = False
     list_per_page = 10
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_product_counts()
+
+    @admin.display(description=_("Products"), ordering="product_count")
+    def product_count(self, obj):
+        return getattr(obj, "product_count", 0)
+
+
+@admin.register(AttributeValue)
+class AttributeValueAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "attribute",
+                    "value",
+                    "sort_order",
+                ),
+            },
+        ),
+    )
+    list_display = ["value", "attribute", "sort_order"]
+    list_filter = [("attribute", admin.RelatedOnlyFieldListFilter)]
+    search_fields = ["value", "attribute__name"]
+    autocomplete_fields = ["attribute"]
+    readonly_fields = ["id", "created", "modified"]
+    show_full_result_count = False
+    list_per_page = 10
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_attribute()
+
+    def has_module_permission(self, request):
+        return False
 
 
 class AttributeValueInline(admin.TabularInline):
     model = AttributeValue
     extra = 0
     min_num = 1
+    fields = ("value", "sort_order")
+    ordering = ("sort_order", "value")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_attribute()
 
 
 @admin.register(Attribute)
@@ -54,17 +99,66 @@ class AttributeAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_display = [
-        "name",
-        "attribute_type",
-    ]
+    list_display = ["name", "attribute_type"]
     list_filter = ["attribute_type"]
     search_fields = ["name"]
     readonly_fields = ["id", "created", "modified"]
     list_per_page = 10
+    show_full_result_count = False
 
 
-admin.site.register(Product)
-admin.site.register(ProductAttribute)
-admin.site.register(ProductVariant)
-admin.site.register(ProductVariantAttributeValue)
+class ProductVariantAttributeValueInline(nested_admin.NestedTabularInline):
+    model = ProductVariantAttributeValue
+    extra = 0
+    autocomplete_fields = ["attribute_value"]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_product_variant().with_attribute_value()
+
+
+class ProductVariantInline(nested_admin.NestedTabularInline):
+    inlines = [ProductVariantAttributeValueInline]
+    model = ProductVariant
+    extra = 0
+    fields = ("sku", "price_override", "stock_quantity", "sort_order", "is_active")
+    ordering = ("sort_order", "sku")
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_product()
+
+
+@admin.register(Product)
+class ProductAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ProductVariantInline]
+    fieldsets = (
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "category",
+                    "name",
+                    "slug",
+                    "short_description",
+                    "full_description",
+                    "base_price",
+                    "attributes",
+                    "is_featured",
+                    "is_active",
+                ),
+            },
+        ),
+    )
+    list_display = ["name", "category", "base_price", "is_featured", "is_active"]
+    list_filter = ["category", "is_featured", "is_active"]
+    search_fields = ["name", "slug"]
+    autocomplete_fields = ["category", "attributes"]
+    prepopulated_fields = {"slug": ("name",)}
+    readonly_fields = ["id", "created", "modified"]
+    show_full_result_count = False
+    list_per_page = 10
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_category().with_attributes()
