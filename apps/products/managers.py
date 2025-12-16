@@ -121,8 +121,11 @@ class ProductVariantAttributeValueManager(
 
 
 class ProductImageQuerySet(ActiveQuerySet):
-    def with_product_and_variant(self):
-        return self.select_related("product", "variant")
+    def with_product(self):
+        return self.select_related("product")
+
+    def with_variant(self):
+        return self.select_related("variant__product")
 
 
 class ProductImageManager(models.Manager.from_queryset(ProductImageQuerySet)):

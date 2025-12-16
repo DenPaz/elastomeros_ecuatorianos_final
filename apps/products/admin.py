@@ -6,6 +6,7 @@ from .models import Attribute
 from .models import AttributeValue
 from .models import Category
 from .models import Product
+from .models import ProductImage
 from .models import ProductVariant
 from .models import ProductVariantAttributeValue
 
@@ -107,6 +108,37 @@ class ProductVariantAttributeValueInline(nested_admin.NestedTabularInline):
     autocomplete_fields = ["attribute_value"]
 
 
+@admin.register(ProductVariant)
+class ProductVariantAdmin(nested_admin.NestedModelAdmin):
+    inlines = [ProductVariantAttributeValueInline]
+    fieldsets = (
+        (
+            _("General information"),
+            {
+                "fields": (
+                    "product",
+                    "sku",
+                    "price_override",
+                    "stock_quantity",
+                    "sort_order",
+                    "is_active",
+                ),
+            },
+        ),
+    )
+    list_display = ["product", "sku", "price_override", "stock_quantity", "is_active"]
+    list_filter = ["is_active"]
+    search_fields = ["sku", "product__name"]
+    autocomplete_fields = ["product"]
+    readonly_fields = ["id", "created", "modified"]
+    show_full_result_count = False
+    list_per_page = 10
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_product()
+
+
 class ProductVariantInline(nested_admin.NestedTabularInline):
     inlines = [ProductVariantAttributeValueInline]
     model = ProductVariant
@@ -120,9 +152,33 @@ class ProductVariantInline(nested_admin.NestedTabularInline):
         return qs.with_product()
 
 
+class ProductImageInline(nested_admin.NestedTabularInline):
+    model = ProductImage
+    extra = 0
+    fields = ("variant", "image", "alt_text", "sort_order", "is_active")
+    ordering = ("sort_order",)
+    autocomplete_fields = ["variant"]
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.with_product().with_variant()
+
+    def get_formset(self, request, obj=None, **kwargs):
+        self._parent_obj = obj
+        return super().get_formset(request, obj, **kwargs)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "variant":
+            qs = ProductVariant.objects.select_related("product")
+            if getattr(self, "_parent_obj", None):
+                qs = qs.filter(product=self._parent_obj)
+            kwargs["queryset"] = qs
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 @admin.register(Product)
 class ProductAdmin(nested_admin.NestedModelAdmin):
-    inlines = [ProductVariantInline]
+    inlines = [ProductVariantInline, ProductImageInline]
     fieldsets = (
         (
             _("General information"),
