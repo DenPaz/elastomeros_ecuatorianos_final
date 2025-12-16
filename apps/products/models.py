@@ -303,7 +303,7 @@ class ProductVariantAttributeValue(models.Model):
                 name="unique_product_variant_attribute_link",
             ),
         ]
-        ordering = ["product_variant", "attribute"]
+        ordering = ["product_variant_id", "attribute_id"]
 
     def __str__(self):
         return f"{self.product_variant.sku} - {self.attribute_value}"

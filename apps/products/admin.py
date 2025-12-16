@@ -64,10 +64,6 @@ class AttributeValueAdmin(admin.ModelAdmin):
     show_full_result_count = False
     list_per_page = 10
 
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.with_attribute()
-
     def has_module_permission(self, request):
         return False
 
@@ -78,10 +74,6 @@ class AttributeValueInline(admin.TabularInline):
     min_num = 1
     fields = ("value", "sort_order")
     ordering = ("sort_order", "value")
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.with_attribute()
 
 
 @admin.register(Attribute)
@@ -110,17 +102,16 @@ class AttributeAdmin(admin.ModelAdmin):
 class ProductVariantAttributeValueInline(nested_admin.NestedTabularInline):
     model = ProductVariantAttributeValue
     extra = 0
+    fields = ("attribute_value",)
+    exclude = ("attribute",)
     autocomplete_fields = ["attribute_value"]
-
-    def get_queryset(self, request):
-        qs = super().get_queryset(request)
-        return qs.with_product_variant().with_attribute_value()
 
 
 class ProductVariantInline(nested_admin.NestedTabularInline):
     inlines = [ProductVariantAttributeValueInline]
     model = ProductVariant
     extra = 0
+    min_num = 1
     fields = ("sku", "price_override", "stock_quantity", "sort_order", "is_active")
     ordering = ("sort_order", "sku")
 
