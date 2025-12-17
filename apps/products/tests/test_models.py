@@ -4,6 +4,8 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
+from apps.core.utils import get_default_image_url
+
 from .factories import AttributeFactory
 from .factories import AttributeValueFactory
 from .factories import CategoryFactory
@@ -28,6 +30,10 @@ class TestCategory:
         CategoryFactory(slug="home-appliances")
         with pytest.raises(IntegrityError):
             CategoryFactory(slug="home-appliances")
+
+    def test_get_image_url_method_returns_default_when_no_image(self):
+        category = CategoryFactory(image="")
+        assert category.get_image_url() == get_default_image_url()
 
 
 @pytest.mark.django_db

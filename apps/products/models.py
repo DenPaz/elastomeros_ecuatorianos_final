@@ -5,11 +5,13 @@ from django.core.validators import FileExtensionValidator
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models.functions import Lower
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import TimeStampedModel
 from model_utils.models import UUIDModel
 
 from apps.core.fields import OrderField
+from apps.core.utils import get_default_image_url
 from apps.core.validators import FileSizeValidator
 
 from .choices import AttributeType
@@ -37,6 +39,15 @@ class Category(UUIDModel, TimeStampedModel):
         verbose_name=_("Description"),
         blank=True,
     )
+    image = models.ImageField(
+        verbose_name=_("Image"),
+        upload_to="products/categories/",
+        validators=[
+            FileSizeValidator(max_size=5, unit="MB"),
+            FileExtensionValidator(allowed_extensions=["jpg", "jpeg", "png"]),
+        ],
+        blank=True,
+    )
     is_active = models.BooleanField(
         verbose_name=_("Active"),
         default=True,
@@ -61,6 +72,15 @@ class Category(UUIDModel, TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_absolute_url(self):
+        url = reverse("products:product_list")
+        return f"{url}?category={self.slug}"
+
+    def get_image_url(self):
+        if self.image and hasattr(self.image, "url"):
+            return self.image.url
+        return get_default_image_url()
 
 
 class Attribute(TimeStampedModel):
@@ -202,6 +222,9 @@ class Product(UUIDModel, TimeStampedModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_absolute_url(self):
+        return reverse("products:product_detail", kwargs={"slug": self.slug})
 
 
 class ProductVariant(UUIDModel, TimeStampedModel):
