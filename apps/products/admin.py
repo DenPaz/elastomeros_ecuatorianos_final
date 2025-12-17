@@ -21,6 +21,7 @@ class CategoryAdmin(admin.ModelAdmin):
                     "name",
                     "slug",
                     "description",
+                    "image",
                     "is_active",
                 ),
             },
