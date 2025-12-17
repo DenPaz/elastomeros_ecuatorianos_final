@@ -10,5 +10,5 @@ uv run manage.py update_site_domain_and_name
 uv run manage.py create_test_users
 uv run manage.py create_categories
 uv run manage.py create_attributes
-# uv run manage.py create_products
+uv run manage.py create_products
 uv run manage.py runserver
