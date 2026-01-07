@@ -1,8 +1,11 @@
 from django.apps import apps
 from django.db import models
 from django.db.models import Count
+from django.db.models import Max
+from django.db.models import Min
 from django.db.models import Prefetch
 from django.db.models import Q
+from django.db.models import Sum
 
 
 class ActiveQuerySet(models.QuerySet):
@@ -88,6 +91,22 @@ class ProductQuerySet(ActiveQuerySet):
                 "variants",
                 queryset=queryset,
                 to_attr="active_variants",
+            ),
+        )
+
+    def with_variants_summary(self):
+        return self.annotate(
+            min_price=Min(
+                "variants__price",
+                filter=Q(variants__is_active=True),
+            ),
+            max_price=Max(
+                "variants__price",
+                filter=Q(variants__is_active=True),
+            ),
+            total_stock=Sum(
+                "variants__stock_quantity",
+                filter=Q(variants__is_active=True),
             ),
         )
 

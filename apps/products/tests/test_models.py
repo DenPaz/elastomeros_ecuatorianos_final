@@ -225,7 +225,7 @@ class TestProductVariantAttributeValue:
 
 @pytest.mark.django_db
 class TestProductImage:
-    def test_str_method_returns_product_name_and_variant_sku_or_default(self):
+    def test_str_method_returns_product_name_and_variant_sku_or_just_product_name(self):
         product = ProductFactory(name="Headphones")
         variant = ProductVariantFactory(product=product, sku="HEAD-001")
         image_with_variant = ProductImageFactory(product=product, variant=variant)

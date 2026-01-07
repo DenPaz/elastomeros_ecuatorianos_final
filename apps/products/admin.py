@@ -139,6 +139,9 @@ class ProductVariantAdmin(nested_admin.NestedModelAdmin):
         qs = super().get_queryset(request)
         return qs.with_product()
 
+    def has_module_permission(self, request):
+        return False
+
 
 class ProductVariantInline(nested_admin.NestedTabularInline):
     inlines = [ProductVariantAttributeValueInline]
@@ -196,7 +199,13 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
             },
         ),
     )
-    list_display = ["name", "category", "is_active"]
+    list_display = [
+        "name",
+        "category",
+        "price_range",
+        "total_stock",
+        "is_active",
+    ]
     list_filter = ["category", "is_active"]
     search_fields = ["name", "slug"]
     autocomplete_fields = ["category", "attributes"]
@@ -207,4 +216,18 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.with_category().with_attributes()
+        return qs.with_category().with_variants_summary()
+
+    @admin.display(description=_("Price range"))
+    def price_range(self, obj):
+        min_price = getattr(obj, "min_price", None)
+        max_price = getattr(obj, "max_price", None)
+        if min_price is None:
+            return _("N/A")
+        if min_price == max_price:
+            return f"${min_price:.2f}"
+        return f"${min_price:.2f} - ${max_price:.2f}"
+
+    @admin.display(description=_("Total stock"), ordering="total_stock")
+    def total_stock(self, obj):
+        return getattr(obj, "total_stock", 0)

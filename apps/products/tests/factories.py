@@ -22,7 +22,7 @@ class CategoryFactory(DjangoModelFactory):
     name = Sequence(lambda n: f"Category {n}")
     slug = LazyAttribute(lambda obj: slugify(obj.name))
     description = Faker("paragraph")
-    image = Faker("image_url")
+    image = ImageField(filename="category.jpg")
     is_active = True
 
     class Meta:

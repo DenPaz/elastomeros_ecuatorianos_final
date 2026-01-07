@@ -65,7 +65,7 @@ class Category(UUIDModel, TimeStampedModel):
         constraints = [
             models.UniqueConstraint(
                 Lower("name"),
-                name="unique_category_name",
+                name="unique_category_name_case_insensitive",
             ),
         ]
         ordering = ["name"]
@@ -109,7 +109,7 @@ class Attribute(TimeStampedModel):
         constraints = [
             models.UniqueConstraint(
                 Lower("name"),
-                name="unique_attribute_name",
+                name="unique_attribute_name_case_insensitive",
             ),
         ]
         ordering = ["group", "name"]
@@ -145,7 +145,7 @@ class AttributeValue(TimeStampedModel):
             models.UniqueConstraint(
                 Lower("value"),
                 "attribute",
-                name="unique_attribute_value_per_attribute",
+                name="unique_attribute_value_per_attribute_case_insensitive",
             ),
         ]
         ordering = ["attribute", "sort_order", "value"]
@@ -203,7 +203,7 @@ class Product(UUIDModel, TimeStampedModel):
             models.UniqueConstraint(
                 Lower("name"),
                 "category",
-                name="unique_product_name_per_category",
+                name="unique_product_name_per_category_case_insensitive",
             ),
         ]
         ordering = ["name"]
