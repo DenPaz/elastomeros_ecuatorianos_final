@@ -14,13 +14,7 @@ class CategoryQuerySet(ActiveQuerySet):
     def with_products(self):
         Product = apps.get_model("products", "Product")
         queryset = Product.objects.order_by("name")
-        return self.prefetch_related(
-            Prefetch(
-                "products",
-                queryset=queryset,
-                to_attr="all_products",
-            ),
-        )
+        return self.prefetch_related(Prefetch("products", queryset=queryset))
 
     def with_active_products(self):
         Product = apps.get_model("products", "Product")
@@ -89,7 +83,13 @@ class ProductQuerySet(ActiveQuerySet):
     def with_active_variants(self):
         ProductVariant = apps.get_model("products", "ProductVariant")
         queryset = ProductVariant.objects.active().order_by("sort_order", "sku")
-        return self.prefetch_related(Prefetch("variants", queryset=queryset))
+        return self.prefetch_related(
+            Prefetch(
+                "variants",
+                queryset=queryset,
+                to_attr="active_variants",
+            ),
+        )
 
 
 class ProductManager(models.Manager.from_queryset(ProductQuerySet)):

@@ -32,13 +32,12 @@ data = [
             "resistencia, asegurando la durabilidad y "
             "confort en los productos finales."
         ),
-        "base_price": "25.00",
-        "attributes": {"name": "Volumen del recipiente", "attribute_type": "VOLUME"},
+        "attributes": {"name": "Volumen del recipiente", "group": "VOLUME"},
         "is_active": True,
         "variants": [
             {
                 "sku": "LTX-CREM-1GAL",
-                "price_override": "25.00",
+                "price": "25.00",
                 "stock_quantity": 35,
                 "attribute_values": {"Volumen del recipiente": "1 Galón"},
                 "sort_order": 0,
@@ -46,7 +45,7 @@ data = [
             },
             {
                 "sku": "LTX-CREM-5GAL",
-                "price_override": "110.00",
+                "price": "110.00",
                 "stock_quantity": 20,
                 "attribute_values": {"Volumen del recipiente": "5 Galones"},
                 "sort_order": 1,
@@ -76,12 +75,11 @@ data = [
             "y colores, nuestros guantes se adaptan a tus necesidades "
             "diarias de limpieza."
         ),
-        "base_price": "1.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-DOM-AMAR-7",
-                "price_override": "1.00",
+                "price": "1.00",
                 "stock_quantity": 100,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -92,7 +90,7 @@ data = [
             },
             {
                 "sku": "GUANT-DOM-AMAR-75",
-                "price_override": "1.00",
+                "price": "1.00",
                 "stock_quantity": 70,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -103,7 +101,7 @@ data = [
             },
             {
                 "sku": "GUANT-DOM-AMAR-8",
-                "price_override": "1.00",
+                "price": "1.00",
                 "stock_quantity": 80,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -114,7 +112,7 @@ data = [
             },
             {
                 "sku": "GUANT-DOM-AMAR-85",
-                "price_override": "1.00",
+                "price": "1.00",
                 "stock_quantity": 60,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -125,7 +123,7 @@ data = [
             },
             {
                 "sku": "GUANT-DOM-AMAR-9",
-                "price_override": "1.00",
+                "price": "1.00",
                 "stock_quantity": 90,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -159,12 +157,11 @@ data = [
             "y colores, nuestros guantes se adaptan a las necesidades "
             "específicas de tu entorno de trabajo."
         ),
-        "base_price": "1.30",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-SEMI-AMAR-7",
-                "price_override": "1.30",
+                "price": "1.30",
                 "stock_quantity": 50,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -175,7 +172,7 @@ data = [
             },
             {
                 "sku": "GUANT-SEMI-AMAR-75",
-                "price_override": "1.30",
+                "price": "1.30",
                 "stock_quantity": 40,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -186,7 +183,7 @@ data = [
             },
             {
                 "sku": "GUANT-SEMI-AMAR-8",
-                "price_override": "1.30",
+                "price": "1.30",
                 "stock_quantity": 60,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -197,7 +194,7 @@ data = [
             },
             {
                 "sku": "GUANT-SEMI-AMAR-85",
-                "price_override": "1.30",
+                "price": "1.30",
                 "stock_quantity": 30,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -208,7 +205,7 @@ data = [
             },
             {
                 "sku": "GUANT-SEMI-AMAR-9",
-                "price_override": "1.30",
+                "price": "1.30",
                 "stock_quantity": 70,
                 "attribute_values": {
                     "Color de guantes": "Amarillo",
@@ -227,13 +224,12 @@ dummy_data = [
         "slug": "sellador-poliuretano-300ml",
         "short_description": "Sellador elástico de alta adherencia para juntas.",
         "full_description": "Ideal para sellar juntas de construcción, grietas y fisuras. Ofrece una excelente resistencia a la intemperie y al envejecimiento. Curado rápido y pintable.",
-        "base_price": "8.50",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "SEL-POL-300-BLC",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 150,
                 "attribute_values": {"Color": "Blanco"},
                 "sort_order": 0,
@@ -241,7 +237,7 @@ dummy_data = [
             },
             {
                 "sku": "SEL-POL-300-GRS",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 120,
                 "attribute_values": {"Color": "Gris"},
                 "sort_order": 1,
@@ -249,7 +245,7 @@ dummy_data = [
             },
             {
                 "sku": "SEL-POL-300-NGR",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 90,
                 "attribute_values": {"Color": "Negro"},
                 "sort_order": 2,
@@ -263,12 +259,11 @@ dummy_data = [
         "slug": "bota-seguridad-punta-acero",
         "short_description": "Bota de trabajo robusta con protección dieléctrica.",
         "full_description": "Fabricada en cuero de alta resistencia, con suela antideslizante y punta de acero para máxima protección en entornos industriales. Cumple con normas de seguridad.",
-        "base_price": "45.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "CALZ-SEG-PNT-39",
-                "price_override": "45.00",
+                "price": "45.00",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "39", "Color": "Negro"},
                 "sort_order": 0,
@@ -276,7 +271,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-SEG-PNT-40",
-                "price_override": "45.00",
+                "price": "45.00",
                 "stock_quantity": 40,
                 "attribute_values": {"Talla de Calzado": "40", "Color": "Negro"},
                 "sort_order": 1,
@@ -284,7 +279,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-SEG-PNT-41",
-                "price_override": "45.00",
+                "price": "45.00",
                 "stock_quantity": 50,
                 "attribute_values": {"Talla de Calzado": "41", "Color": "Negro"},
                 "sort_order": 2,
@@ -292,7 +287,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-SEG-PNT-42",
-                "price_override": "45.00",
+                "price": "45.00",
                 "stock_quantity": 50,
                 "attribute_values": {"Talla de Calzado": "42", "Color": "Negro"},
                 "sort_order": 3,
@@ -300,7 +295,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-SEG-PNT-43",
-                "price_override": "45.00",
+                "price": "45.00",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "43", "Color": "Negro"},
                 "sort_order": 4,
@@ -314,12 +309,11 @@ dummy_data = [
         "slug": "manguera-riego-reforzada",
         "short_description": "Manguera de PVC flexible con refuerzo de poliéster.",
         "full_description": "Diseñada para uso agrícola e industrial. Alta resistencia a la abrasión y a la presión. Flexible y fácil de manejar en todas las condiciones climáticas.",
-        "base_price": "18.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-RIE-1/2-25M",
-                "price_override": "18.00",
+                "price": "18.00",
                 "stock_quantity": 50,
                 "attribute_values": {
                     "Diámetro Interno": "1/2 pulgada",
@@ -330,7 +324,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-RIE-1/2-50M",
-                "price_override": "35.00",
+                "price": "35.00",
                 "stock_quantity": 30,
                 "attribute_values": {
                     "Diámetro Interno": "1/2 pulgada",
@@ -341,7 +335,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-RIE-3/4-25M",
-                "price_override": "25.00",
+                "price": "25.00",
                 "stock_quantity": 40,
                 "attribute_values": {
                     "Diámetro Interno": "3/4 pulgada",
@@ -352,7 +346,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-RIE-3/4-50M",
-                "price_override": "48.00",
+                "price": "48.00",
                 "stock_quantity": 20,
                 "attribute_values": {
                     "Diámetro Interno": "3/4 pulgada",
@@ -369,12 +363,11 @@ dummy_data = [
         "slug": "piso-caucho-antideslizante-m2",
         "short_description": "Piso de caucho tipo moneda para alto tráfico.",
         "full_description": "Revestimiento de caucho vulcanizado de alta durabilidad, ideal para gimnasios, talleres, y zonas de juego. Fácil de instalar y limpiar. Se vende por metro cuadrado.",
-        "base_price": "12.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "PISO-CAU-MON-NGR",
-                "price_override": "12.50",
+                "price": "12.50",
                 "stock_quantity": 500,
                 "attribute_values": {"Color": "Negro", "Espesor": "3mm"},
                 "sort_order": 0,
@@ -382,7 +375,7 @@ dummy_data = [
             },
             {
                 "sku": "PISO-CAU-MON-GRS",
-                "price_override": "13.00",
+                "price": "13.00",
                 "stock_quantity": 300,
                 "attribute_values": {"Color": "Gris", "Espesor": "3mm"},
                 "sort_order": 1,
@@ -390,7 +383,7 @@ dummy_data = [
             },
             {
                 "sku": "PISO-CAU-MON-AZL",
-                "price_override": "13.00",
+                "price": "13.00",
                 "stock_quantity": 200,
                 "attribute_values": {"Color": "Azul", "Espesor": "3mm"},
                 "sort_order": 2,
@@ -398,7 +391,7 @@ dummy_data = [
             },
             {
                 "sku": "PISO-CAU-MON-NGR-5MM",
-                "price_override": "16.50",
+                "price": "16.50",
                 "stock_quantity": 150,
                 "attribute_values": {"Color": "Negro", "Espesor": "5mm"},
                 "sort_order": 3,
@@ -412,13 +405,12 @@ dummy_data = [
         "slug": "casco-seguridad-dielectrico",
         "short_description": "Casco de protección industrial con suspensión de 4 puntos.",
         "full_description": "Casco ligero y resistente, diseñado para proteger contra impactos y descargas eléctricas. Cumple con la norma ANSI Z89.1 Tipo I, Clase E.",
-        "base_price": "11.00",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-CASCO-BLC",
-                "price_override": "11.00",
+                "price": "11.00",
                 "stock_quantity": 80,
                 "attribute_values": {"Color": "Blanco"},
                 "sort_order": 0,
@@ -426,7 +418,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-CASCO-AMR",
-                "price_override": "11.00",
+                "price": "11.00",
                 "stock_quantity": 60,
                 "attribute_values": {"Color": "Amarillo"},
                 "sort_order": 1,
@@ -434,7 +426,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-CASCO-AZL",
-                "price_override": "11.00",
+                "price": "11.00",
                 "stock_quantity": 50,
                 "attribute_values": {"Color": "Azul"},
                 "sort_order": 2,
@@ -442,7 +434,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-CASCO-RJO",
-                "price_override": "11.00",
+                "price": "11.00",
                 "stock_quantity": 30,
                 "attribute_values": {"Color": "Rojo"},
                 "sort_order": 3,
@@ -456,12 +448,11 @@ dummy_data = [
         "slug": "adhesivo-contacto-1-galon",
         "short_description": "Adhesivo de alto rendimiento para madera, caucho y cuero.",
         "full_description": "Adhesivo de secado rápido y fuerte agarre. Ideal para trabajos de carpintería, tapicería y reparaciones generales. Resistente al calor y la humedad.",
-        "base_price": "22.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "ADH-CONT-1GAL",
-                "price_override": "22.00",
+                "price": "22.00",
                 "stock_quantity": 45,
                 "attribute_values": {
                     "Volumen del recipiente": "1 Galón",
@@ -478,12 +469,11 @@ dummy_data = [
         "slug": "guantes-nitrilo-desechables-100u",
         "short_description": "Guantes finos para uso médico o alimenticio, sin polvo.",
         "full_description": "Caja de 100 guantes de nitrilo ambidiestros, libres de látex y polvo. Ofrecen excelente sensibilidad táctil y protección contra bacterias y químicos.",
-        "base_price": "9.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-NIT-DES-S",
-                "price_override": "9.50",
+                "price": "9.50",
                 "stock_quantity": 200,
                 "attribute_values": {"Tamaño de guantes": "S", "Color": "Azul"},
                 "sort_order": 0,
@@ -491,7 +481,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-NIT-DES-M",
-                "price_override": "9.50",
+                "price": "9.50",
                 "stock_quantity": 300,
                 "attribute_values": {"Tamaño de guantes": "M", "Color": "Azul"},
                 "sort_order": 1,
@@ -499,7 +489,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-NIT-DES-L",
-                "price_override": "9.50",
+                "price": "9.50",
                 "stock_quantity": 250,
                 "attribute_values": {"Tamaño de guantes": "L", "Color": "Azul"},
                 "sort_order": 2,
@@ -507,7 +497,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-NIT-DES-XL",
-                "price_override": "9.50",
+                "price": "9.50",
                 "stock_quantity": 100,
                 "attribute_values": {"Tamaño de guantes": "XL", "Color": "Azul"},
                 "sort_order": 3,
@@ -521,12 +511,11 @@ dummy_data = [
         "slug": "gafas-seguridad-antiempanantes",
         "short_description": "Gafas de policarbonato con protección UV y anti-rayaduras.",
         "full_description": "Protección ocular ligera y cómoda. Lentes claros con tratamiento anti-empañante y filtro UV 99.9%. Patillas ajustables para un ajuste perfecto.",
-        "base_price": "3.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-GAF-CLARO",
-                "price_override": "3.50",
+                "price": "3.50",
                 "stock_quantity": 300,
                 "attribute_values": {"Color": "Transparente"},
                 "sort_order": 0,
@@ -534,7 +523,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-GAF-OSCURO",
-                "price_override": "3.75",
+                "price": "3.75",
                 "stock_quantity": 150,
                 "attribute_values": {"Color": "Gris"},
                 "sort_order": 1,
@@ -548,12 +537,11 @@ dummy_data = [
         "slug": "manguera-aire-comprimido-10bar",
         "short_description": "Manguera de caucho sintético para herramientas neumáticas.",
         "full_description": "Manguera robusta para líneas de aire comprimido en talleres e industria. Resistente a aceites y abrasión. Incluye acoples rápidos.",
-        "base_price": "28.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-AIRE-1/4-10M",
-                "price_override": "28.00",
+                "price": "28.00",
                 "stock_quantity": 40,
                 "attribute_values": {
                     "Diámetro Interno": "1/4 pulgada",
@@ -564,7 +552,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-AIRE-1/4-20M",
-                "price_override": "55.00",
+                "price": "55.00",
                 "stock_quantity": 20,
                 "attribute_values": {
                     "Diámetro Interno": "1/4 pulgada",
@@ -575,7 +563,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-AIRE-3/8-10M",
-                "price_override": "35.00",
+                "price": "35.00",
                 "stock_quantity": 35,
                 "attribute_values": {
                     "Diámetro Interno": "3/8 pulgada",
@@ -592,12 +580,11 @@ dummy_data = [
         "slug": "piso-dielectrico-aislante-10m",
         "short_description": "Piso de caucho aislante para tableros eléctricos.",
         "full_description": "Rollo de 1m de ancho por 10m de largo. Diseñado para proteger al personal de descargas eléctricas en áreas de alto voltaje. Clase 2 (17,000V).",
-        "base_price": "450.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "PISO-DIEL-CL2-NGR",
-                "price_override": "450.00",
+                "price": "450.00",
                 "stock_quantity": 10,
                 "attribute_values": {"Color": "Negro", "Espesor": "4mm"},
                 "sort_order": 0,
@@ -605,7 +592,7 @@ dummy_data = [
             },
             {
                 "sku": "PISO-DIEL-CL2-GRS",
-                "price_override": "450.00",
+                "price": "450.00",
                 "stock_quantity": 5,
                 "attribute_values": {"Color": "Gris", "Espesor": "4mm"},
                 "sort_order": 1,
@@ -619,12 +606,11 @@ dummy_data = [
         "slug": "bota-pvc-blanca-sanitaria",
         "short_description": "Bota impermeable para industria alimentaria o laboratorios.",
         "full_description": "Bota de caña alta fabricada en PVC, 100% impermeable. Fácil de limpiar y desinfectar. Suela antideslizante resistente a grasas y aceites.",
-        "base_price": "19.90",
         "is_active": True,
         "variants": [
             {
                 "sku": "CALZ-PVC-BL-38",
-                "price_override": "19.90",
+                "price": "19.90",
                 "stock_quantity": 25,
                 "attribute_values": {"Talla de Calzado": "38", "Color": "Blanco"},
                 "sort_order": 0,
@@ -632,7 +618,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-BL-39",
-                "price_override": "19.90",
+                "price": "19.90",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "39", "Color": "Blanco"},
                 "sort_order": 1,
@@ -640,7 +626,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-BL-40",
-                "price_override": "19.90",
+                "price": "19.90",
                 "stock_quantity": 40,
                 "attribute_values": {"Talla de Calzado": "40", "Color": "Blanco"},
                 "sort_order": 2,
@@ -648,7 +634,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-BL-41",
-                "price_override": "19.90",
+                "price": "19.90",
                 "stock_quantity": 40,
                 "attribute_values": {"Talla de Calzado": "41", "Color": "Blanco"},
                 "sort_order": 3,
@@ -656,7 +642,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-BL-42",
-                "price_override": "19.90",
+                "price": "19.90",
                 "stock_quantity": 35,
                 "attribute_values": {"Talla de Calzado": "42", "Color": "Blanco"},
                 "sort_order": 4,
@@ -670,12 +656,11 @@ dummy_data = [
         "slug": "silicona-acetica-transparente-280ml",
         "short_description": "Sellador de silicona para baños y cocinas.",
         "full_description": "Forma un sello flexible e impermeable, resistente a la formación de hongos. Ideal para sellar alrededor de lavabos, bañeras y ventanas.",
-        "base_price": "4.20",
         "is_active": True,
         "variants": [
             {
                 "sku": "SIL-ACE-280-TR",
-                "price_override": "4.20",
+                "price": "4.20",
                 "stock_quantity": 250,
                 "attribute_values": {
                     "Color": "Transparente",
@@ -686,7 +671,7 @@ dummy_data = [
             },
             {
                 "sku": "SIL-ACE-280-BL",
-                "price_override": "4.20",
+                "price": "4.20",
                 "stock_quantity": 180,
                 "attribute_values": {"Color": "Blanco", "Tipo de Adhesivo": "Silicona"},
                 "sort_order": 1,
@@ -700,12 +685,11 @@ dummy_data = [
         "slug": "guante-nitrilo-industrial-par",
         "short_description": "Guante robusto resistente a químicos y solventes.",
         "full_description": "Guante de nitrilo de 13 pulgadas de largo, calibre 15. Ofrece protección superior contra aceites, grasas, ácidos y solventes. Interior flocado para mayor comodidad.",
-        "base_price": "2.10",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-IND-NIT-8",
-                "price_override": "2.10",
+                "price": "2.10",
                 "stock_quantity": 120,
                 "attribute_values": {"Tamaño de guantes": "8", "Color": "Verde"},
                 "sort_order": 0,
@@ -713,7 +697,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-IND-NIT-9",
-                "price_override": "2.10",
+                "price": "2.10",
                 "stock_quantity": 150,
                 "attribute_values": {"Tamaño de guantes": "9", "Color": "Verde"},
                 "sort_order": 1,
@@ -721,7 +705,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-IND-NIT-10",
-                "price_override": "2.10",
+                "price": "2.10",
                 "stock_quantity": 100,
                 "attribute_values": {"Tamaño de guantes": "10", "Color": "Verde"},
                 "sort_order": 2,
@@ -735,13 +719,12 @@ dummy_data = [
         "slug": "manguera-succion-descarga-2-pulg-metro",
         "short_description": "Manguera de PVC corrugada para agua y lodos.",
         "full_description": "Manguera flexible y duradera para succión y descarga de agua, lodos ligeros y materiales abrasivos. Espiral de PVC rígido. Se vende por metro lineal.",
-        "base_price": "7.80",
-        "attributes": {"name": "Diámetro Interno", "attribute_type": "WIDTH"},
+        "attributes": {"name": "Diámetro Interno", "group": "WIDTH"},
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-SUC-2-M",
-                "price_override": "7.80",
+                "price": "7.80",
                 "stock_quantity": 100,
                 "attribute_values": {"Diámetro Interno": "2 pulgadas"},
                 "sort_order": 0,
@@ -749,7 +732,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-SUC-3-M",
-                "price_override": "11.20",
+                "price": "11.20",
                 "stock_quantity": 50,
                 "attribute_values": {"Diámetro Interno": "3 pulgadas"},
                 "sort_order": 1,
@@ -763,12 +746,11 @@ dummy_data = [
         "slug": "plancha-caucho-sbr-m2",
         "short_description": "Lámina de caucho SBR para uso general industrial.",
         "full_description": "Plancha de caucho SBR (estireno-butadieno) de 1m de ancho. Buena resistencia a la abrasión y al impacto. Ideal para juntas, sellos y pisos. Se vende por m2.",
-        "base_price": "9.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "PLN-SBR-2MM-M2",
-                "price_override": "9.00",
+                "price": "9.00",
                 "stock_quantity": 80,
                 "attribute_values": {"Espesor": "2mm", "Color": "Negro"},
                 "sort_order": 0,
@@ -776,7 +758,7 @@ dummy_data = [
             },
             {
                 "sku": "PLN-SBR-3MM-M2",
-                "price_override": "13.50",
+                "price": "13.50",
                 "stock_quantity": 60,
                 "attribute_values": {"Espesor": "3mm", "Color": "Negro"},
                 "sort_order": 1,
@@ -784,7 +766,7 @@ dummy_data = [
             },
             {
                 "sku": "PLN-SBR-5MM-M2",
-                "price_override": "22.00",
+                "price": "22.00",
                 "stock_quantity": 40,
                 "attribute_values": {"Espesor": "5mm", "Color": "Negro"},
                 "sort_order": 2,
@@ -798,12 +780,11 @@ dummy_data = [
         "slug": "arnes-seguridad-cuerpo-completo",
         "short_description": "Arnés con 4 puntos de anclaje para trabajos en altura.",
         "full_description": "Arnés de seguridad ergonómico con anillas D en espalda y pecho. Cintas de poliéster ajustables en piernas y torso. Certificado para trabajos en altura.",
-        "base_price": "38.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-ARNES-FULL-L",
-                "price_override": "38.00",
+                "price": "38.00",
                 "stock_quantity": 25,
                 "attribute_values": {"Talla de Arnés": "L/XL", "Color": "Rojo/Negro"},
                 "sort_order": 0,
@@ -811,7 +792,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-ARNES-FULL-M",
-                "price_override": "38.00",
+                "price": "38.00",
                 "stock_quantity": 20,
                 "attribute_values": {"Talla de Arnés": "S/M", "Color": "Rojo/Negro"},
                 "sort_order": 1,
@@ -825,12 +806,11 @@ dummy_data = [
         "slug": "adhesivo-epoxico-10-min",
         "short_description": "Pegamento extra fuerte de dos componentes.",
         "full_description": "Jeringa de 25ml. Mezcla y pega en 10 minutos. Une metales, cerámica, madera, vidrio y plásticos duros. Alta resistencia a la tracción.",
-        "base_price": "5.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "ADH-EPOX-10MIN",
-                "price_override": "5.50",
+                "price": "5.50",
                 "stock_quantity": 90,
                 "attribute_values": {
                     "Tipo de Adhesivo": "Epóxico",
@@ -847,13 +827,12 @@ dummy_data = [
         "slug": "topes-anden-caucho",
         "short_description": "Tope de caucho para protección de muelles de carga.",
         "full_description": "Bloque de caucho vulcanizado de alta densidad. Dimensiones 50cm x 15cm x 10cm. Absorbe impactos de camiones y protege la infraestructura del andén.",
-        "base_price": "18.00",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "TOPE-ANDEN-50X15",
-                "price_override": "18.00",
+                "price": "18.00",
                 "stock_quantity": 60,
                 "attribute_values": {"Color": "Negro"},
                 "sort_order": 0,
@@ -867,12 +846,11 @@ dummy_data = [
         "slug": "manguera-grado-alimenticio-metro",
         "short_description": "Manguera atóxica para transporte de líquidos.",
         "full_description": "Manguera de PVC transparente con refuerzo, aprobada por FDA para contacto con alimentos y bebidas. No altera el sabor ni el olor.",
-        "base_price": "4.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-ALIM-3/4-M",
-                "price_override": "4.50",
+                "price": "4.50",
                 "stock_quantity": 70,
                 "attribute_values": {
                     "Diámetro Interno": "3/4 pulgada",
@@ -883,7 +861,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-ALIM-1-M",
-                "price_override": "5.80",
+                "price": "5.80",
                 "stock_quantity": 60,
                 "attribute_values": {
                     "Diámetro Interno": "1 pulgada",
@@ -900,13 +878,12 @@ dummy_data = [
         "slug": "chaleco-reflectivo-seguridad",
         "short_description": "Chaleco de alta visibilidad con cintas reflectivas.",
         "full_description": "Chaleco tipo periodista fabricado en tela fluorescente con cintas reflectivas de 2 pulgadas. Cierre frontal. Ideal para trabajos viales y construcción.",
-        "base_price": "4.80",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-CHALECO-NAR",
-                "price_override": "4.80",
+                "price": "4.80",
                 "stock_quantity": 150,
                 "attribute_values": {"Color": "Naranja"},
                 "sort_order": 0,
@@ -914,7 +891,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-CHALECO-VER",
-                "price_override": "4.80",
+                "price": "4.80",
                 "stock_quantity": 120,
                 "attribute_values": {"Color": "Verde Fluorescente"},
                 "sort_order": 1,
@@ -928,13 +905,12 @@ dummy_data = [
         "slug": "cinta-antideslizante-adhesiva-5m",
         "short_description": "Cinta adhesiva con superficie abrasiva para gradas.",
         "full_description": "Rollo de 5 metros de largo y 2 pulgadas de ancho. Evita resbalones en gradas, rampas y superficies lisas. Adhesivo de alta duración.",
-        "base_price": "6.20",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "CINTA-ANTI-5M-NGR",
-                "price_override": "6.20",
+                "price": "6.20",
                 "stock_quantity": 90,
                 "attribute_values": {"Color": "Negro"},
                 "sort_order": 0,
@@ -942,7 +918,7 @@ dummy_data = [
             },
             {
                 "sku": "CINTA-ANTI-5M-AMR",
-                "price_override": "6.50",
+                "price": "6.50",
                 "stock_quantity": 60,
                 "attribute_values": {"Color": "Amarillo/Negro"},
                 "sort_order": 1,
@@ -956,12 +932,11 @@ dummy_data = [
         "slug": "zapato-seguridad-dielectrico-ejecutivo",
         "short_description": "Zapato de seguridad ligero con punta de composite.",
         "full_description": "Diseño casual tipo ejecutivo, pero con toda la protección. Punta de composite (no metálica) y suela dieléctrica. Ultra ligero y cómodo.",
-        "base_price": "55.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "CALZ-EJEC-COMP-40",
-                "price_override": "55.00",
+                "price": "55.00",
                 "stock_quantity": 20,
                 "attribute_values": {"Talla de Calzado": "40", "Color": "Negro"},
                 "sort_order": 0,
@@ -969,7 +944,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-EJEC-COMP-41",
-                "price_override": "55.00",
+                "price": "55.00",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "41", "Color": "Negro"},
                 "sort_order": 1,
@@ -977,7 +952,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-EJEC-COMP-42",
-                "price_override": "55.00",
+                "price": "55.00",
                 "stock_quantity": 25,
                 "attribute_values": {"Talla de Calzado": "42", "Color": "Negro"},
                 "sort_order": 2,
@@ -991,12 +966,11 @@ dummy_data = [
         "slug": "guantes-neopreno-quimicos-par",
         "short_description": "Guantes de alta resistencia a ácidos y cáusticos.",
         "full_description": "Guantes de 18 pulgadas de largo, fabricados en neopreno sobre látex. Excelente protección contra un amplio espectro de productos químicos.",
-        "base_price": "7.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-NEO-CHEM-9",
-                "price_override": "7.50",
+                "price": "7.50",
                 "stock_quantity": 50,
                 "attribute_values": {"Tamaño de guantes": "9", "Color": "Negro"},
                 "sort_order": 0,
@@ -1004,7 +978,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-NEO-CHEM-10",
-                "price_override": "7.50",
+                "price": "7.50",
                 "stock_quantity": 40,
                 "attribute_values": {"Tamaño de guantes": "10", "Color": "Negro"},
                 "sort_order": 1,
@@ -1018,13 +992,12 @@ dummy_data = [
         "slug": "mascarilla-media-cara-filtros",
         "short_description": "Respirador reutilizable para vapores y partículas.",
         "full_description": "Mascarilla de elastómero termoplástico, cómoda y ligera. Incluye un par de cartuchos para vapores orgánicos (OV) y prefiltros P100.",
-        "base_price": "29.99",
-        "attributes": {"name": "Talla de Mascarilla", "attribute_type": "SIZE"},
+        "attributes": {"name": "Talla de Mascarilla", "group": "SIZE"},
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-MASK-MEDIA-M",
-                "price_override": "29.99",
+                "price": "29.99",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Mascarilla": "M"},
                 "sort_order": 0,
@@ -1032,7 +1005,7 @@ dummy_data = [
             },
             {
                 "sku": "EPP-MASK-MEDIA-L",
-                "price_override": "29.99",
+                "price": "29.99",
                 "stock_quantity": 20,
                 "attribute_values": {"Talla de Mascarilla": "L"},
                 "sort_order": 1,
@@ -1046,12 +1019,11 @@ dummy_data = [
         "slug": "manguera-descarga-plana-2-pulg",
         "short_description": "Manguera azul de PVC para descarga de agua, rollo 50m.",
         "full_description": "Manguera flexible y liviana que se aplana al vaciarse para un fácil almacenamiento. Ideal para bombas sumergibles y aplicaciones de riego.",
-        "base_price": "65.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-LAYFLAT-2-50M",
-                "price_override": "65.00",
+                "price": "65.00",
                 "stock_quantity": 15,
                 "attribute_values": {
                     "Diámetro Interno": "2 pulgadas",
@@ -1062,7 +1034,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-LAYFLAT-3-50M",
-                "price_override": "85.00",
+                "price": "85.00",
                 "stock_quantity": 10,
                 "attribute_values": {
                     "Diámetro Interno": "3 pulgadas",
@@ -1079,13 +1051,12 @@ dummy_data = [
         "slug": "cinta-embalaje-transparente-6u",
         "short_description": "Cinta adhesiva de 48mm x 50m para sellado de cajas.",
         "full_description": "Paquete de 6 rollos de cinta de embalaje transparente. Adhesivo acrílico de alta adherencia para un sellado seguro y duradero de cajas de cartón.",
-        "base_price": "5.99",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "CINTA-EMB-TR-6PK",
-                "price_override": "5.99",
+                "price": "5.99",
                 "stock_quantity": 200,
                 "attribute_values": {"Color": "Transparente"},
                 "sort_order": 0,
@@ -1099,12 +1070,11 @@ dummy_data = [
         "slug": "plancha-neopreno-m2",
         "short_description": "Lámina de neopreno resistente a aceites y clima.",
         "full_description": "Plancha de neopreno de 1m de ancho. Excelente resistencia a aceites, grasas y condiciones climáticas. Ideal para juntas y sellos automotrices o marinos. Venta por m2.",
-        "base_price": "18.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "PLN-NEO-2MM-M2",
-                "price_override": "18.00",
+                "price": "18.00",
                 "stock_quantity": 30,
                 "attribute_values": {"Espesor": "2mm", "Color": "Negro"},
                 "sort_order": 0,
@@ -1112,7 +1082,7 @@ dummy_data = [
             },
             {
                 "sku": "PLN-NEO-3MM-M2",
-                "price_override": "26.00",
+                "price": "26.00",
                 "stock_quantity": 25,
                 "attribute_values": {"Espesor": "3mm", "Color": "Negro"},
                 "sort_order": 1,
@@ -1126,12 +1096,11 @@ dummy_data = [
         "slug": "bota-pvc-cana-alta-industrial",
         "short_description": "Bota negra con punta de acero, resistente a hidrocarburos.",
         "full_description": "Bota industrial fabricada en PVC/Nitrilo para resistir hidrocarburos, grasas y aceites. Incluye punta de acero y suela antideslizante.",
-        "base_price": "24.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "CALZ-PVC-IND-39",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "39", "Color": "Negro"},
                 "sort_order": 0,
@@ -1139,7 +1108,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-IND-40",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 40,
                 "attribute_values": {"Talla de Calzado": "40", "Color": "Negro"},
                 "sort_order": 1,
@@ -1147,7 +1116,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-IND-41",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 45,
                 "attribute_values": {"Talla de Calzado": "41", "Color": "Negro"},
                 "sort_order": 2,
@@ -1155,7 +1124,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-IND-42",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 40,
                 "attribute_values": {"Talla de Calzado": "42", "Color": "Negro"},
                 "sort_order": 3,
@@ -1163,7 +1132,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-IND-43",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 30,
                 "attribute_values": {"Talla de Calzado": "43", "Color": "Negro"},
                 "sort_order": 4,
@@ -1171,7 +1140,7 @@ dummy_data = [
             },
             {
                 "sku": "CALZ-PVC-IND-44",
-                "price_override": "24.50",
+                "price": "24.50",
                 "stock_quantity": 20,
                 "attribute_values": {"Talla de Calzado": "44", "Color": "Negro"},
                 "sort_order": 5,
@@ -1185,13 +1154,12 @@ dummy_data = [
         "slug": "protector-auditivo-tipo-copa",
         "short_description": "Orejeras de seguridad con NRR 25dB.",
         "full_description": "Protector auditivo tipo diadema, ligero y ajustable. Copas acolchadas para mayor comodidad durante el uso prolongado. Nivel de reducción de ruido (NRR) de 25 decibeles.",
-        "base_price": "14.00",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "EPP-OREJERA-25DB",
-                "price_override": "14.00",
+                "price": "14.00",
                 "stock_quantity": 70,
                 "attribute_values": {"Color": "Rojo/Negro"},
                 "sort_order": 0,
@@ -1205,13 +1173,12 @@ dummy_data = [
         "slug": "cinta-doble-faz-10m",
         "short_description": "Cinta de espuma acrílica de alta adherencia.",
         "full_description": "Rollo de 10m x 19mm. Cinta de espuma de polietileno con adhesivo acrílico en ambas caras. Ideal para montajes ligeros, cartelería y manualidades.",
-        "base_price": "3.80",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "CINTA-DBLFAZ-10M",
-                "price_override": "3.80",
+                "price": "3.80",
                 "stock_quantity": 110,
                 "attribute_values": {"Color": "Blanco"},
                 "sort_order": 0,
@@ -1225,13 +1192,12 @@ dummy_data = [
         "slug": "rompevelocidades-caucho-modulo",
         "short_description": "Módulo de 50cm para reductor de velocidad.",
         "full_description": "Módulo individual de reductor de velocidad. Fabricado en caucho reciclado de alta resistencia. Incluye cintas reflectivas amarillas. No incluye pernos de anclaje.",
-        "base_price": "16.00",
-        "attributes": {"name": "Color", "attribute_type": "COLOR"},
+        "attributes": {"name": "Color", "group": "COLOR"},
         "is_active": True,
         "variants": [
             {
                 "sku": "ROMPEVEL-MOD-50CM",
-                "price_override": "16.00",
+                "price": "16.00",
                 "stock_quantity": 80,
                 "attribute_values": {"Color": "Amarillo/Negro"},
                 "sort_order": 0,
@@ -1245,12 +1211,11 @@ dummy_data = [
         "slug": "guante-anticorte-nivel-5-par",
         "short_description": "Guante de fibra HPPE con recubrimiento de PU.",
         "full_description": "Máxima protección contra cortes (Nivel 5 ANSI/ISEA). Recubrimiento de poliuretano en la palma para un excelente agarre en seco y húmedo.",
-        "base_price": "8.50",
         "is_active": True,
         "variants": [
             {
                 "sku": "GUANT-AC-N5-M",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 60,
                 "attribute_values": {"Tamaño de guantes": "M", "Color": "Gris"},
                 "sort_order": 0,
@@ -1258,7 +1223,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-AC-N5-L",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 70,
                 "attribute_values": {"Tamaño de guantes": "L", "Color": "Gris"},
                 "sort_order": 1,
@@ -1266,7 +1231,7 @@ dummy_data = [
             },
             {
                 "sku": "GUANT-AC-N5-XL",
-                "price_override": "8.50",
+                "price": "8.50",
                 "stock_quantity": 50,
                 "attribute_values": {"Tamaño de guantes": "XL", "Color": "Gris"},
                 "sort_order": 2,
@@ -1280,12 +1245,11 @@ dummy_data = [
         "slug": "manguera-pvc-transparente-1-4-metro",
         "short_description": "Manguera de nivel, atóxica, para líquidos.",
         "full_description": "Manguera de PVC flexible y transparente para visualización de fluidos. Ideal para aplicaciones de nivel, conducción de líquidos a baja presión.",
-        "base_price": "0.60",
         "is_active": True,
         "variants": [
             {
                 "sku": "MANG-PVC-TR-1/4-M",
-                "price_override": "0.60",
+                "price": "0.60",
                 "stock_quantity": 300,
                 "attribute_values": {
                     "Diámetro Interno": "1/4 pulgada",
@@ -1296,7 +1260,7 @@ dummy_data = [
             },
             {
                 "sku": "MANG-PVC-TR-1/2-M",
-                "price_override": "0.90",
+                "price": "0.90",
                 "stock_quantity": 200,
                 "attribute_values": {
                     "Diámetro Interno": "1/2 pulgada",
@@ -1313,12 +1277,11 @@ dummy_data = [
         "slug": "piso-caucho-tachon-m2",
         "short_description": "Piso de caucho con diseño de botones grandes.",
         "full_description": "Similar al piso moneda, pero con un diseño de tachones más grandes. Excelente para rampas y áreas que requieren máximo agarre.",
-        "base_price": "15.00",
         "is_active": True,
         "variants": [
             {
                 "sku": "PISO-CAU-TACH-NGR-4MM",
-                "price_override": "15.00",
+                "price": "15.00",
                 "stock_quantity": 100,
                 "attribute_values": {"Color": "Negro", "Espesor": "4mm"},
                 "sort_order": 0,
@@ -1357,8 +1320,6 @@ class Command(BaseCommand):
                 "name": entry["name"],
                 "short_description": entry.get("short_description", "") or "",
                 "full_description": entry.get("full_description", "") or "",
-                "base_price": Decimal(str(entry.get("base_price", "0.00"))),
-                "is_featured": bool(entry.get("is_featured", False)),
                 "is_active": bool(entry.get("is_active", True)),
             }
             product_obj, product_created = Product.objects.update_or_create(
@@ -1376,11 +1337,11 @@ class Command(BaseCommand):
                 "name",
             ):
                 attr_name = product_attribute_spec["name"]
-                attr_type = product_attribute_spec.get("attribute_type") or "OTHER"
+                attr_type = product_attribute_spec.get("group") or "OTHER"
 
                 attribute_obj, attribute_created = Attribute.objects.get_or_create(
                     name=attr_name,
-                    defaults={"attribute_type": attr_type},
+                    defaults={"group": attr_type},
                 )
                 if attribute_created:
                     self.stdout.write(
@@ -1403,11 +1364,11 @@ class Command(BaseCommand):
                 }
 
                 if (
-                    "price_override" in variant_defaults
-                    and variant_defaults["price_override"] is not None
+                    "price" in variant_defaults
+                    and variant_defaults["price"] is not None
                 ):
-                    variant_defaults["price_override"] = Decimal(
-                        str(variant_defaults["price_override"]),
+                    variant_defaults["price"] = Decimal(
+                        str(variant_defaults["price"]),
                     )
 
                 variant_defaults["product"] = product_obj
@@ -1429,7 +1390,7 @@ class Command(BaseCommand):
                         variant_attribute_obj, attribute_created = (
                             Attribute.objects.get_or_create(
                                 name=attr_name,
-                                defaults={"attribute_type": "OTHER"},
+                                defaults={"group": "OTHER"},
                             )
                         )
                         if attribute_created:

@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 import pytest
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
@@ -122,19 +120,6 @@ class TestProductVariant:
         with pytest.raises(IntegrityError):
             ProductVariantFactory(sku="UNIQUE-SKU")
 
-    def test_price_property_returns_correct_value(self):
-        product = ProductFactory(base_price=Decimal("100.00"))
-        variant_with_price_override = ProductVariantFactory(
-            product=product,
-            price_override=Decimal("80.00"),
-        )
-        variant_without_price_override = ProductVariantFactory(
-            product=product,
-            price_override=None,
-        )
-        assert variant_with_price_override.price == Decimal("80.00")
-        assert variant_without_price_override.price == Decimal("100.00")
-
     def test_factory_post_generation_attribute_values_creates_attribute_values(self):
         attribute1 = AttributeFactory(name="Color")
         value1 = AttributeValueFactory(attribute=attribute1, value="Black")
@@ -245,35 +230,8 @@ class TestProductImage:
         variant = ProductVariantFactory(product=product, sku="HEAD-001")
         image_with_variant = ProductImageFactory(product=product, variant=variant)
         image_without_variant = ProductImageFactory(product=product, variant=None)
-        assert str(image_with_variant) == "Image for Headphones (SKU: HEAD-001)"
-        assert str(image_without_variant) == "Image for Headphones"
-
-    def test_save_method_sets_default_alt_text(self):
-        product = ProductFactory(name="Speaker", slug="speaker")
-        variant = ProductVariantFactory(product=product, sku="SPK-001")
-        image_with_variant = ProductImageFactory(
-            product=product,
-            variant=variant,
-            alt_text="",
-        )
-        image_without_variant = ProductImageFactory(
-            product=product,
-            variant=None,
-            alt_text="",
-        )
-        assert image_with_variant.alt_text == "Image of speaker (SKU: SPK-001)"
-        assert image_without_variant.alt_text == "Image of speaker"
-
-    def test_save_method_preserves_existing_alt_text(self):
-        product = ProductFactory(name="Monitor", slug="monitor")
-        variant = ProductVariantFactory(product=product, sku="MON-001")
-        custom_alt_text = "Custom alt text for monitor image"
-        image = ProductImageFactory(
-            product=product,
-            variant=variant,
-            alt_text=custom_alt_text,
-        )
-        assert image.alt_text == custom_alt_text
+        assert str(image_with_variant) == "Image of Headphones (SKU: HEAD-001)"
+        assert str(image_without_variant) == "Image of Headphones"
 
     def test_variant_must_belong_to_product(self):
         product1 = ProductFactory(name="Keyboard")

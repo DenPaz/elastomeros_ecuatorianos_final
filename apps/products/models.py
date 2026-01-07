@@ -14,7 +14,7 @@ from apps.core.fields import OrderField
 from apps.core.utils import get_default_image_url
 from apps.core.validators import FileSizeValidator
 
-from .choices import AttributeType
+from .choices import AttributeGroup
 from .managers import AttributeManager
 from .managers import AttributeValueManager
 from .managers import CategoryManager
@@ -65,7 +65,7 @@ class Category(UUIDModel, TimeStampedModel):
         constraints = [
             models.UniqueConstraint(
                 Lower("name"),
-                name="unique_category_name_case_insensitive",
+                name="unique_category_name",
             ),
         ]
         ordering = ["name"]
@@ -74,8 +74,7 @@ class Category(UUIDModel, TimeStampedModel):
         return f"{self.name}"
 
     def get_absolute_url(self):
-        url = reverse("products:product_list")
-        return f"{url}?category={self.slug}"
+        return f"{reverse('products:product_list')}?category={self.slug}"
 
     def get_image_url(self):
         if self.image and hasattr(self.image, "url"):
@@ -88,10 +87,10 @@ class Attribute(TimeStampedModel):
         verbose_name=_("Name"),
         max_length=255,
     )
-    attribute_type = models.CharField(
-        verbose_name=_("Attribute type"),
+    group = models.CharField(
+        verbose_name=_("Group"),
         max_length=50,
-        choices=AttributeType.choices,
+        choices=AttributeGroup.choices,
     )
     description = models.TextField(
         verbose_name=_("Description"),
@@ -105,15 +104,15 @@ class Attribute(TimeStampedModel):
         verbose_name_plural = _("Attributes")
         indexes = [
             models.Index(fields=["name"]),
-            models.Index(fields=["attribute_type"]),
+            models.Index(fields=["group"]),
         ]
         constraints = [
             models.UniqueConstraint(
                 Lower("name"),
-                name="unique_attribute_name_case_insensitive",
+                name="unique_attribute_name",
             ),
         ]
-        ordering = ["name"]
+        ordering = ["group", "name"]
 
     def __str__(self):
         return f"{self.name}"
@@ -144,8 +143,8 @@ class AttributeValue(TimeStampedModel):
         verbose_name_plural = _("Attribute values")
         constraints = [
             models.UniqueConstraint(
-                "attribute",
                 Lower("value"),
+                "attribute",
                 name="unique_attribute_value_per_attribute",
             ),
         ]
@@ -179,21 +178,11 @@ class Product(UUIDModel, TimeStampedModel):
         verbose_name=_("Full description"),
         blank=True,
     )
-    base_price = models.DecimalField(
-        verbose_name=_("Base price"),
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal("0.00"))],
-    )
     attributes = models.ManyToManyField(
         to=Attribute,
         verbose_name=_("Attributes"),
         related_name="products",
         blank=True,
-    )
-    is_featured = models.BooleanField(
-        verbose_name=_("Featured"),
-        default=False,
     )
     is_active = models.BooleanField(
         verbose_name=_("Active"),
@@ -208,14 +197,13 @@ class Product(UUIDModel, TimeStampedModel):
         indexes = [
             models.Index(fields=["name"]),
             models.Index(fields=["is_active"]),
-            models.Index(fields=["is_featured"]),
             models.Index(fields=["-created"]),
         ]
         constraints = [
             models.UniqueConstraint(
-                "category",
                 Lower("name"),
-                name="unique_product_name_per_category_case_insensitive",
+                "category",
+                name="unique_product_name_per_category",
             ),
         ]
         ordering = ["name"]
@@ -236,16 +224,14 @@ class ProductVariant(UUIDModel, TimeStampedModel):
     )
     sku = models.CharField(
         verbose_name=_("SKU"),
-        max_length=100,
+        max_length=50,
         unique=True,
     )
-    price_override = models.DecimalField(
-        verbose_name=_("Price override"),
+    price = models.DecimalField(
+        verbose_name=_("Price"),
         max_digits=10,
         decimal_places=2,
         validators=[MinValueValidator(Decimal("0.00"))],
-        blank=True,
-        null=True,
     )
     stock_quantity = models.PositiveIntegerField(
         verbose_name=_("Stock quantity"),
@@ -282,26 +268,16 @@ class ProductVariant(UUIDModel, TimeStampedModel):
     def __str__(self):
         return f"{self.product.name} (SKU: {self.sku})"
 
-    @property
-    def price(self):
-        return (
-            self.price_override
-            if self.price_override is not None
-            else self.product.base_price
-        )
-
 
 class ProductVariantAttributeValue(models.Model):
     product_variant = models.ForeignKey(
         to=ProductVariant,
         verbose_name=_("Product variant"),
-        related_name="variant_attribute_values",
         on_delete=models.CASCADE,
     )
     attribute_value = models.ForeignKey(
         to=AttributeValue,
         verbose_name=_("Attribute value"),
-        related_name="variant_attribute_values",
         on_delete=models.PROTECT,
     )
     attribute = models.ForeignKey(
@@ -434,24 +410,22 @@ class ProductImage(TimeStampedModel):
         ordering = ["product", "sort_order"]
 
     def __str__(self):
-        if self.variant:
-            return f"Image for {self.product.name} (SKU: {self.variant.sku})"
-        return f"Image for {self.product.name}"
+        if self.variant_id:
+            return f"Image of {self.product.name} (SKU: {self.variant.sku})"
+        return f"Image of {self.product.name}"
 
     def save(self, *args, **kwargs):
-        if not self.alt_text:
-            if self.variant:
-                self.alt_text = (
-                    f"Image of {self.product.slug} (SKU: {self.variant.sku})"
-                )
-            else:
-                self.alt_text = f"Image of {self.product.slug}"
         self.full_clean()
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        if self.variant and self.variant.product != self.product:
+        self._validate_variant_belongs_to_product()
+
+    def _validate_variant_belongs_to_product(self):
+        if not self.variant_id or not self.product_id:
+            return
+        if self.variant.product_id != self.product_id:
             raise ValidationError(
                 {
                     "variant": _(

@@ -6,7 +6,7 @@ from apps.products.models import AttributeValue
 data = [
     {
         "name": "Color de guantes",
-        "attribute_type": "COLOR",
+        "group": "COLOR",
         "description": (
             "Atributo que define los colores disponibles para "
             "los guantes de caucho natural."
@@ -18,7 +18,7 @@ data = [
     },
     {
         "name": "Tamaño de guantes",
-        "attribute_type": "SIZE",
+        "group": "SIZE",
         "description": (
             "Atributo que define los tamaños disponibles para los "
             "guantes de caucho natural."
@@ -33,7 +33,7 @@ data = [
     },
     {
         "name": "Volumen del recipiente",
-        "attribute_type": "VOLUME",
+        "group": "VOLUME",
         "description": (
             "Atributo que define los volúmenes disponibles para los "
             "recipientes de latex."

@@ -8,7 +8,7 @@ from factory import post_generation
 from factory.django import DjangoModelFactory
 from factory.django import ImageField
 
-from apps.products.choices import AttributeType
+from apps.products.choices import AttributeGroup
 from apps.products.models import Attribute
 from apps.products.models import AttributeValue
 from apps.products.models import Category
@@ -31,7 +31,7 @@ class CategoryFactory(DjangoModelFactory):
 
 class AttributeFactory(DjangoModelFactory):
     name = Sequence(lambda n: f"Attribute {n}")
-    attribute_type = Iterator([choice[0] for choice in AttributeType.choices])
+    group = Iterator([choice[0] for choice in AttributeGroup.choices])
     description = Faker("paragraph")
 
     class Meta:
@@ -62,8 +62,6 @@ class ProductFactory(DjangoModelFactory):
     slug = LazyAttribute(lambda obj: slugify(obj.name))
     short_description = Faker("sentence")
     full_description = Faker("paragraph")
-    base_price = Faker("pydecimal", left_digits=4, right_digits=2, positive=True)
-    is_featured = False
     is_active = True
 
     class Meta:
@@ -80,7 +78,7 @@ class ProductFactory(DjangoModelFactory):
 class ProductVariantFactory(DjangoModelFactory):
     product = SubFactory(ProductFactory)
     sku = Sequence(lambda n: f"SKU-{n:05d}")
-    price_override = None
+    price = Faker("pydecimal", left_digits=5, right_digits=2, positive=True)
     stock_quantity = Faker("pyint", min_value=0, max_value=100)
     sort_order = None
     is_active = True

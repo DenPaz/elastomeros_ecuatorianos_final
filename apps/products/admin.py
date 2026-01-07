@@ -87,14 +87,14 @@ class AttributeAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "name",
-                    "attribute_type",
+                    "group",
                     "description",
                 ),
             },
         ),
     )
-    list_display = ["name", "attribute_type"]
-    list_filter = ["attribute_type"]
+    list_display = ["name", "group"]
+    list_filter = ["group"]
     search_fields = ["name"]
     readonly_fields = ["id", "created", "modified"]
     list_per_page = 10
@@ -119,7 +119,7 @@ class ProductVariantAdmin(nested_admin.NestedModelAdmin):
                 "fields": (
                     "product",
                     "sku",
-                    "price_override",
+                    "price",
                     "stock_quantity",
                     "sort_order",
                     "is_active",
@@ -127,7 +127,7 @@ class ProductVariantAdmin(nested_admin.NestedModelAdmin):
             },
         ),
     )
-    list_display = ["product", "sku", "price_override", "stock_quantity", "is_active"]
+    list_display = ["product", "sku", "price", "stock_quantity", "is_active"]
     list_filter = ["is_active"]
     search_fields = ["sku", "product__name"]
     autocomplete_fields = ["product"]
@@ -145,7 +145,7 @@ class ProductVariantInline(nested_admin.NestedTabularInline):
     model = ProductVariant
     extra = 0
     min_num = 1
-    fields = ("sku", "price_override", "stock_quantity", "sort_order", "is_active")
+    fields = ("sku", "price", "stock_quantity", "sort_order", "is_active")
     ordering = ("sort_order", "sku")
 
     def get_queryset(self, request):
@@ -190,16 +190,14 @@ class ProductAdmin(nested_admin.NestedModelAdmin):
                     "slug",
                     "short_description",
                     "full_description",
-                    "base_price",
                     "attributes",
-                    "is_featured",
                     "is_active",
                 ),
             },
         ),
     )
-    list_display = ["name", "category", "base_price", "is_featured", "is_active"]
-    list_filter = ["category", "is_featured", "is_active"]
+    list_display = ["name", "category", "is_active"]
+    list_filter = ["category", "is_active"]
     search_fields = ["name", "slug"]
     autocomplete_fields = ["category", "attributes"]
     prepopulated_fields = {"slug": ("name",)}
