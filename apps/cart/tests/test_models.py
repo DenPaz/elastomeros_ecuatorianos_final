@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import pytest
 from django.db import IntegrityError
+from django.db import transaction
 
 from apps.cart.choices import CartStatus
 from apps.products.tests.factories import ProductVariantFactory
@@ -35,9 +36,11 @@ class TestCartModel:
         with pytest.raises(IntegrityError):
             CartFactory(user=None, session_key=session_key, status=CartStatus.OPEN)
 
-    def test_constraint_cart_requires_user_or_session_key(self):
-        with pytest.raises(IntegrityError):
-            CartFactory(user=None, session_key=None, status=CartStatus.OPEN)
+    def test_constraint_cart_requires_exactly_one_of_user_or_session_key(self):
+        with pytest.raises(IntegrityError), transaction.atomic():
+            CartFactory(user=None, session_key=None)
+        with pytest.raises(IntegrityError), transaction.atomic():
+            CartFactory(user=UserFactory(), session_key="some-session-key")
 
     def test_constraint_cart_session_key_not_empty_string(self):
         with pytest.raises(IntegrityError):

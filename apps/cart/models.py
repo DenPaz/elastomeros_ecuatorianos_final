@@ -57,8 +57,11 @@ class Cart(UUIDModel, TimeStampedModel):
                 name="unique_open_cart_per_session",
             ),
             models.CheckConstraint(
-                condition=Q(user__isnull=False) | Q(session_key__isnull=False),
-                name="cart_requires_user_or_session_key",
+                condition=(
+                    Q(user__isnull=False, session_key__isnull=True)
+                    | Q(user__isnull=True, session_key__isnull=False)
+                ),
+                name="cart_requires_exactly_one_of_user_or_session_key",
             ),
             models.CheckConstraint(
                 condition=Q(session_key__isnull=True) | ~Q(session_key=""),
