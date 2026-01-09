@@ -20,10 +20,11 @@ class Cart(UUIDModel, TimeStampedModel):
         blank=True,
         null=True,
     )
-    session_key = models.CharField(
+    session_key = models.CharField(  # noqa: DJ001
         verbose_name=_("Session key"),
         max_length=40,
         blank=True,
+        null=True,
     )
     status = models.CharField(
         verbose_name=_("Status"),
@@ -47,25 +48,21 @@ class Cart(UUIDModel, TimeStampedModel):
         constraints = [
             models.UniqueConstraint(
                 fields=["user"],
-                condition=(
-                    Q(status=CartStatus.OPEN)
-                    & Q(user__isnull=False)
-                    & Q(session_key="")
-                ),
+                condition=Q(status=CartStatus.OPEN, user__isnull=False),
                 name="unique_open_cart_per_user",
             ),
             models.UniqueConstraint(
                 fields=["session_key"],
-                condition=(
-                    Q(status=CartStatus.OPEN)
-                    & Q(user__isnull=True)
-                    & ~Q(session_key="")
-                ),
+                condition=Q(status=CartStatus.OPEN, session_key__isnull=False),
                 name="unique_open_cart_per_session",
             ),
             models.CheckConstraint(
-                condition=Q(user__isnull=False) | ~Q(session_key=""),
+                condition=Q(user__isnull=False) | Q(session_key__isnull=False),
                 name="cart_requires_user_or_session_key",
+            ),
+            models.CheckConstraint(
+                condition=Q(session_key__isnull=True) | ~Q(session_key=""),
+                name="cart_session_key_not_empty_string",
             ),
         ]
         ordering = ["-modified"]
@@ -106,7 +103,7 @@ class CartItem(UUIDModel, TimeStampedModel):
                 name="unique_variant_per_cart",
             ),
         ]
-        ordering = ["created"]
+        ordering = ["cart_id", "created"]
 
     def __str__(self):
         return f"{self.cart_id} - {self.variant.sku} x {self.quantity}"

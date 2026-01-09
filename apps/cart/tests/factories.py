@@ -1,4 +1,5 @@
 from factory import Faker
+from factory import Sequence
 from factory import SubFactory
 from factory import Trait
 from factory import post_generation
@@ -13,7 +14,7 @@ from apps.users.tests.factories import UserFactory
 
 class CartFactory(DjangoModelFactory):
     user = SubFactory(UserFactory)
-    session_key = ""
+    session_key = None
     status = CartStatus.OPEN
 
     class Meta:
@@ -21,7 +22,10 @@ class CartFactory(DjangoModelFactory):
         skip_postgeneration_save = True
 
     class Params:
-        is_anonymous = Trait(user=None, session_key=Faker("md5"))
+        is_anonymous = Trait(
+            user=None,
+            session_key=Sequence(lambda n: f"session-{n:032d}"[:40]),
+        )
         is_checked_out = Trait(status=CartStatus.CHECKED_OUT)
         is_abandoned = Trait(status=CartStatus.ABANDONED)
 
@@ -30,8 +34,16 @@ class CartFactory(DjangoModelFactory):
         if not create or not extracted:
             return
 
+        if isinstance(extracted, int):
+            for _ in range(extracted):
+                CartItemFactory(cart=self)
+            return
+
         for item in extracted:
-            CartItemFactory(cart=self, **item)
+            if isinstance(item, dict):
+                CartItemFactory(cart=self, **item)
+            else:
+                CartItemFactory(cart=self, variant=item)
 
 
 class CartItemFactory(DjangoModelFactory):

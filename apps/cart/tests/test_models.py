@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 import pytest
 from django.db import IntegrityError
 
@@ -23,9 +25,9 @@ class TestCartModel:
 
     def test_constraint_unique_open_cart_per_user(self):
         user = UserFactory()
-        CartFactory(user=user, session_key="", status=CartStatus.OPEN)
+        CartFactory(user=user, status=CartStatus.OPEN)
         with pytest.raises(IntegrityError):
-            CartFactory(user=user, session_key="", status=CartStatus.OPEN)
+            CartFactory(user=user, status=CartStatus.OPEN)
 
     def test_constraint_unique_open_cart_per_session(self):
         session_key = "unique-session-key"
@@ -35,13 +37,17 @@ class TestCartModel:
 
     def test_constraint_cart_requires_user_or_session_key(self):
         with pytest.raises(IntegrityError):
+            CartFactory(user=None, session_key=None, status=CartStatus.OPEN)
+
+    def test_constraint_cart_session_key_not_empty_string(self):
+        with pytest.raises(IntegrityError):
             CartFactory(user=None, session_key="")
 
     def test_post_generation_items(self):
-        cart = CartFactory(items=[{"quantity": 2}, {"quantity": 3}])
+        cart = CartFactory(items=[{"quantity": 5}, {"quantity": 1}])
         assert cart.items.count() == 2  # noqa: PLR2004
         quantities = [item.quantity for item in cart.items.all()]
-        assert sorted(quantities) == [2, 3]
+        assert sorted(quantities) == [1, 5]
 
 
 @pytest.mark.django_db
@@ -61,9 +67,9 @@ class TestCartItemModel:
             CartItemFactory(cart=cart, variant=variant)
 
     def test_property_line_total(self):
-        variant = ProductVariantFactory(price=50.00)
+        variant = ProductVariantFactory(price=Decimal("50.00"))
         cart_item = CartItemFactory(variant=variant, quantity=3)
-        assert cart_item.line_total == 150.00  # noqa: PLR2004
+        assert cart_item.line_total == Decimal("150.00")
 
     def test_same_variant_different_carts(self):
         variant = ProductVariantFactory()
