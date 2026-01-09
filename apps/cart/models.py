@@ -72,8 +72,8 @@ class Cart(UUIDModel, TimeStampedModel):
 
     def __str__(self):
         if self.user_id:
-            return f"Cart of {self.user.email} ({self.status})"
-        return f"Cart with session {self.session_key} ({self.status})"
+            return f"Cart {self.pk} for user {self.user} ({self.status})"
+        return f"Cart {self.pk} for session {self.session_key} ({self.status})"
 
 
 class CartItem(UUIDModel, TimeStampedModel):

@@ -13,12 +13,12 @@ from .factories import CartItemFactory
 class TestCartModel:
     def test_str_method_for_authenticated_user(self):
         cart = CartFactory()
-        expected_str = f"Cart of {cart.user.email} ({cart.status})"
+        expected_str = f"Cart {cart.pk} for user {cart.user} ({cart.status})"
         assert str(cart) == expected_str
 
     def test_str_method_for_anonymous_user(self):
         cart = CartFactory(is_anonymous=True)
-        expected_str = f"Cart with session {cart.session_key} ({cart.status})"
+        expected_str = f"Cart {cart.pk} for session {cart.session_key} ({cart.status})"
         assert str(cart) == expected_str
 
     def test_constraint_unique_open_cart_per_user(self):
